@@ -50,7 +50,7 @@ export const PROJECTS = [
     description:
       "A platform for uploading and sharing files securely with features like link sharing, QR code generation, and email-based sharing.",
     technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
-    github: "https://github.com/codes4vinay/filespire",
+    github: "https://github.com/codes4vinay/filetransfer",
     demo: "https://filespire.pages.dev/", // change if different
   },
   {
