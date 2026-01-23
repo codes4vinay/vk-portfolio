@@ -1,106 +1,145 @@
 import React from "react";
-import profilePic from "../assets/raviKumarProfile.webp/";
 import { HERO_CONTENT } from "../constants";
 import { motion } from "framer-motion";
 
 const containerVariants = {
-  hidden: {
-    opacity: 0,
-    x: -100,
-  },
+  hidden: { opacity: 0, x: -80 },
   visible: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.5,
-      staggerChildren: 0.5,
+      duration: 0.6,
+      staggerChildren: 0.25,
+      ease: "easeOut",
     },
   },
 };
 
 const childVariants = {
-  hidden: {
-    opacity: 0,
-    x: -100,
-  },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.5,
-    },
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 };
 
 const Hero = () => {
   return (
-    <div className="pb-4 lg:mb-36">
-      <div className="flex flex-wrap lg:flex-row-reverse">
-        <div className="w-full lg:w-1/2">
-          <div className="flex justify-center lg:p-8">
-            {/* <img
-              src={profilePic}
-              alt=""
-              className="border border-stone-900 rounded-3xl"
-            /> */}
-            <motion.div
-              class="badge-base LI-profile-badge"
+    <section id="about" className=" mt-12 pb-12 lg:pb-32">
+      <div className="flex flex-col-reverse lg:flex-row items-center gap-10">
+        {/* LEFT CONTENT */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left px-4"
+        >
+          {/* NAME */}
+          <motion.h1
+            variants={childVariants}
+            className="
+              bg-gradient-to-r from-stone-100 via-stone-300 to-stone-500
+              bg-clip-text text-transparent
+              text-4xl sm:text-5xl lg:text-7xl
+              font-bold tracking-tight
+            "
+          >
+            Vinay Kumar
+          </motion.h1>
+
+          {/* ROLE */}
+          <motion.span
+            variants={childVariants}
+            className="
+  mt-3 inline-block
+  bg-gradient-to-r from-stone-400 via-stone-400 to-stone-400
+  bg-clip-text text-transparent
+  text-lg sm:text-xl lg:text-2xl
+  tracking-wide
+"
+          >
+            MERN Stack Developer · DevOps Enthusiast
+          </motion.span>
+
+          {/* ACCENT LINE */}
+          <motion.div
+            variants={childVariants}
+            className="
+              mt-4 h-px w-24
+              bg-gradient-to-r from-stone-300 to-transparent
+            "
+          />
+
+          {/* DESCRIPTION */}
+          <motion.p
+            variants={childVariants}
+            className="
+              mt-6 max-w-xl
+              text-base sm:text-lg lg:text-xl
+              leading-relaxed
+              text-stone-300
+            "
+          >
+            {HERO_CONTENT}
+          </motion.p>
+
+          {/* CTA */}
+          <motion.a
+            variants={childVariants}
+            href="/Vinay_Kumar_resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="
+              mt-8 inline-block rounded-full
+              bg-stone-100 px-6 py-3
+              text-sm font-medium text-stone-900
+              shadow hover:bg-stone-200 transition
+            "
+          >
+            Download Resume
+          </motion.a>
+        </motion.div>
+
+        {/* RIGHT CONTENT */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="w-full lg:w-1/2 flex justify-center lg:justify-end px-4"
+        >
+          <div className="relative">
+            {/* BACKDROP */}
+            <div
+              className="
+                absolute -inset-4 rounded-xl
+                bg-gradient-to-r from-stone-800/40 to-stone-700/20
+                blur-xl
+              "
+            />
+
+            {/* LINKEDIN BADGE */}
+            <div
+              className="relative badge-base LI-profile-badge"
               data-locale="en_US"
               data-size="large"
               data-theme="dark"
-              data-type="VERTICAL"
+              data-type="HORIZONTAL"
               data-vanity="vinaykumar2004"
               data-version="v1"
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
             >
               <a
                 className="badge-base__link LI-simple-link"
-                href="https://in.linkedin.com/in/vinaykumar2004?trk=profile-badge"
+                href="https://in.linkedin.com/in/vinaykumar2004"
+                target="_blank"
+                rel="noopener noreferrer"
               ></a>
-            </motion.div>
+            </div>
           </div>
-        </div>
-        <div className="w-full lg:w-1/2">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="flex flex-col items-center lg:items-start mt-10"
-          >
-            <motion.h2
-              variants={childVariants}
-              className="pb-2 text-4xl tracking-tighter lg:text-8xl"
-            >
-              Vinay Kumar
-            </motion.h2>
-            <motion.span
-              variants={childVariants}
-              className="bg-gradient-to-r from-stone-300 to-stone-600 bg-clip-text text-3xl tracking-tight text-transparent"
-            >
-              Full Stack Developer
-            </motion.span>
-            <motion.p
-              variants={childVariants}
-              className="my-2 max-w-lg py-6 text-xl leading-relaxed tracking-tighter"
-            >
-              {HERO_CONTENT}
-            </motion.p>
-            <motion.a
-              variants={childVariants}
-              href="/Vinay_Kumar_resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="bg-white rounded-full p-4 text-sm text-stone-800 mb-10"
-            >
-              Download Resume
-            </motion.a>
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 

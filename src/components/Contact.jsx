@@ -13,7 +13,7 @@ const Contact = () => {
         "service_w60482p", // Your Service ID
         "template_atoqeh8", // Your Template ID
         form.current,
-        "UzB-tGBQoRPq3HO04" // Your Public Key
+        "UzB-tGBQoRPq3HO04", // Your Public Key
       )
       .then(
         () => {
@@ -23,12 +23,12 @@ const Contact = () => {
         (error) => {
           console.error(error);
           alert("❌ Error sending message.");
-        }
+        },
       );
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
       <motion.div
         className="max-w-3xl mx-auto text-center"
         initial={{ opacity: 0, y: 50 }}

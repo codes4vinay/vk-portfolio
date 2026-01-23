@@ -1,87 +1,145 @@
 import React from "react";
 import { PROJECTS } from "../constants/";
 import { motion } from "framer-motion";
+import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
-// Variants for project card animation
+// Card animation
 const projectVariants = {
-  offscreen: { opacity: 0, y: 100 },
-  onscreen: {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", bounce: 0.3, duration: 0.8 },
+    transition: { duration: 0.7, ease: "easeOut" },
   },
 };
 
-// Variants for tech badges
+// Tech badge animation
 const techVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 8 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.3 },
+    transition: { delay: i * 0.08 },
   }),
 };
 
 const Projects = () => {
   return (
-    <div className="pb-4">
+    <section id="projects" className="scroll-mt-24 pb-24">
       {/* Section Title */}
       <motion.h2
-        initial={{ opacity: 0, y: -50 }}
+        initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5 }}
+        transition={{ duration: 0.8 }}
         className="my-20 text-center text-4xl font-semibold"
       >
-        Projects
+        My Projects
       </motion.h2>
 
-      <div>
+      <div className="space-y-10">
         {PROJECTS.map((project, index) => (
           <motion.div
             key={index}
-            className="mb-8 flex flex-wrap lg:justify-center items-center p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-lg"
-            initial="offscreen"
-            whileInView="onscreen"
-            viewport={{ once: false, amount: 0.3 }}
             variants={projectVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="
+              mx-auto max-w-5xl
+              rounded-2xl
+              border border-white/10
+              bg-white/5 backdrop-blur-md
+              p-6
+              transition hover:bg-white/10
+            "
           >
-            {/* Project Image */}
-            <div className="w-full lg:w-1/4">
-              <img
-                src={project.image}
-                alt={project.name}
-                width={250}
-                height={250}
-                className="mb-6 rounded shadow-lg"
-              />
-            </div>
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              {/* Image */}
+              <div className="w-full lg:w-1/3">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="rounded-xl shadow-lg w-full object-cover"
+                />
+              </div>
 
-            {/* Project Details */}
-            <div className="w-full max-w-xl lg:w-3/4">
-              <h3 className="mb-2 text-2xl font-semibold">{project.title}</h3>
-              <p className="mb-4 text-stone-400">{project.description}</p>
+              {/* Content */}
+              <div className="w-full lg:w-2/3">
+                <h3 className="text-2xl font-semibold mb-2">{project.title}</h3>
 
-              {/* Technologies */}
-              <div className="flex flex-wrap">
-                {project.technologies.map((tech, techIndex) => (
-                  <motion.span
-                    key={techIndex}
-                    custom={techIndex}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: false }}
-                    variants={techVariants}
-                    className="mr-2 mb-2 rounded bg-stone-800 p-2 text-sm font-medium text-stone-300"
-                  >
-                    {tech}
-                  </motion.span>
-                ))}
+                <p className="text-stone-400 mb-4 leading-relaxed">
+                  {project.description}
+                </p>
+
+                {/* Tech Stack */}
+                <div className="flex flex-wrap mb-6">
+                  {project.technologies.map((tech, i) => (
+                    <motion.span
+                      key={i}
+                      custom={i}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      variants={techVariants}
+                      className="
+                        mr-2 mb-2
+                        rounded-md
+                        bg-stone-800/80
+                        px-3 py-1
+                        text-xs font-medium text-stone-300
+                      "
+                    >
+                      {tech}
+                    </motion.span>
+                  ))}
+                </div>
+
+                {/* Links */}
+                <div className="flex gap-4">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="
+                        inline-flex items-center gap-2
+                        rounded-full
+                        border border-white/20
+                        px-4 py-2
+                        text-sm text-white
+                        hover:bg-white/10 transition
+                      "
+                    >
+                      <FaGithub />
+                      GitHub
+                    </a>
+                  )}
+
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="
+                        inline-flex items-center gap-2
+                        rounded-full
+                        bg-white text-black
+                        px-4 py-2
+                        text-sm font-medium
+                        hover:bg-stone-200 transition
+                      "
+                    >
+                      <FaExternalLinkAlt />
+                      Live Demo
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

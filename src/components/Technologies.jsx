@@ -1,46 +1,60 @@
 import React from "react";
 import { RiReactjsLine, RiTailwindCssFill } from "react-icons/ri";
-import { TbBrandNextjs, TbBrandMongodb } from "react-icons/tb";
-import { FaNodeJs, FaJava, FaHtml5, FaCss3Alt, FaGitAlt } from "react-icons/fa";
+import { TbBrandMongodb, TbBrandGithub } from "react-icons/tb";
 import {
-  SiFirebase,
+  FaNodeJs,
+  FaJava,
+  FaHtml5,
+  FaCss3Alt,
+  FaGitAlt,
+  FaDocker,
+  FaLinux,
+  FaAws,
+} from "react-icons/fa";
+import {
   SiJavascript,
   SiExpress,
   SiVite,
   SiPostman,
   SiNpm,
+  SiGithubactions,
+  SiKubernetes,
+  SiTerraform,
+  SiAnsible,
+  SiCloudflare,
+  SiRender,
+  SiNginx,
 } from "react-icons/si";
 import { motion } from "framer-motion";
 
 const iconVariants = (duration, delay = 0) => ({
   animate: {
-    y: [0, -20, 10, 0], // bigger floating distance
-    rotate: [0, 10, -10, 0], // more noticeable rotation
-    scale: [1, 1.2, 1, 1.15], // stronger scaling
+    y: [0, -20, 10, 0],
+    rotate: [0, 10, -10, 0],
+    scale: [1, 1.2, 1, 1.15],
     transition: {
-      duration: duration,
+      duration,
       ease: "easeInOut",
       repeat: Infinity,
       repeatType: "loop",
-      delay: delay,
+      delay,
     },
   },
 });
 
 const Technologies = () => {
   const techStack = [
+    // Frontend
     {
       name: "React",
       icon: <RiReactjsLine className="text-7xl text-cyan-400" />,
     },
     {
-      name: "Next.js",
-      icon: <TbBrandNextjs className="text-7xl text-white" />,
-    },
-    {
       name: "TailwindCSS",
       icon: <RiTailwindCssFill className="text-7xl text-sky-400" />,
     },
+
+    // Backend
     { name: "Node.js", icon: <FaNodeJs className="text-7xl text-green-500" /> },
     {
       name: "Express.js",
@@ -50,10 +64,8 @@ const Technologies = () => {
       name: "MongoDB",
       icon: <TbBrandMongodb className="text-7xl text-green-600" />,
     },
-    {
-      name: "Firebase",
-      icon: <SiFirebase className="text-7xl text-yellow-400" />,
-    },
+
+    // Languages & Tools
     {
       name: "JavaScript",
       icon: <SiJavascript className="text-7xl text-yellow-300" />,
@@ -68,17 +80,54 @@ const Technologies = () => {
       name: "Postman",
       icon: <SiPostman className="text-7xl text-orange-400" />,
     },
+
+    // DevOps & Cloud
+    { name: "Docker", icon: <FaDocker className="text-7xl text-sky-500" /> },
+    { name: "Linux", icon: <FaLinux className="text-7xl text-gray-200" /> },
+    { name: "AWS", icon: <FaAws className="text-7xl text-orange-400" /> },
+    {
+      name: "GitHub",
+      icon: <TbBrandGithub className="text-7xl text-white" />,
+    },
+    {
+      name: "GitHub Actions",
+      icon: <SiGithubactions className="text-7xl text-blue-400" />,
+    },
+    {
+      name: "Kubernetes",
+      icon: <SiKubernetes className="text-7xl text-blue-500" />,
+    },
+    {
+      name: "Terraform",
+      icon: <SiTerraform className="text-7xl text-purple-400" />,
+    },
+    {
+      name: "Ansible",
+      icon: <SiAnsible className="text-7xl text-red-500" />,
+    },
+    {
+      name: "Cloudflare",
+      icon: <SiCloudflare className="text-7xl text-orange-500" />,
+    },
+    {
+      name: "Render",
+      icon: <SiRender className="text-7xl text-indigo-400" />,
+    },
+    {
+      name: "Nginx",
+      icon: <SiNginx className="text-7xl text-green-500" />,
+    },
   ];
 
   return (
-    <div className="pb-24">
+    <div id="technologies" className="pb-24">
       <motion.h2
         whileInView={{ opacity: 1, y: 0 }}
         initial={{ opacity: 0, y: -100 }}
         transition={{ duration: 1.5 }}
         className="my-20 text-center text-4xl font-semibold"
       >
-        Technologies
+        My Technologies
       </motion.h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 justify-items-center">
