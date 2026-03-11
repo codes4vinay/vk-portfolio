@@ -51,7 +51,7 @@ export const PROJECTS = [
       "A platform for uploading and sharing files securely with features like link sharing, QR code generation, and email-based sharing.",
     technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
     github: "https://github.com/codes4vinay/filespire",
-    demo: "https://filespire.pages.dev/",
+    demo: "https://filespire.pages.dev/", // change if different
   },
   {
     title: "Auto Reload NPM Package",
