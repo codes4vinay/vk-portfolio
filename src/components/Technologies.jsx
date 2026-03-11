@@ -18,12 +18,11 @@ import {
   SiPostman,
   SiNpm,
   SiGithubactions,
-  SiKubernetes,
-  SiTerraform,
-  SiAnsible,
   SiCloudflare,
   SiRender,
   SiNginx,
+  SiVercel,
+  SiZod,
 } from "react-icons/si";
 import { motion } from "framer-motion";
 
@@ -55,7 +54,10 @@ const Technologies = () => {
     },
 
     // Backend
-    { name: "Node.js", icon: <FaNodeJs className="text-7xl text-green-500" /> },
+    {
+      name: "Node.js",
+      icon: <FaNodeJs className="text-7xl text-green-500" />,
+    },
     {
       name: "Express.js",
       icon: <SiExpress className="text-7xl text-gray-300" />,
@@ -70,21 +72,48 @@ const Technologies = () => {
       name: "JavaScript",
       icon: <SiJavascript className="text-7xl text-yellow-300" />,
     },
-    { name: "Java", icon: <FaJava className="text-7xl text-red-500" /> },
-    { name: "HTML5", icon: <FaHtml5 className="text-7xl text-orange-500" /> },
-    { name: "CSS3", icon: <FaCss3Alt className="text-7xl text-blue-500" /> },
-    { name: "Vite", icon: <SiVite className="text-7xl text-purple-500" /> },
-    { name: "NPM", icon: <SiNpm className="text-7xl text-red-600" /> },
-    { name: "Git", icon: <FaGitAlt className="text-7xl text-orange-600" /> },
+    {
+      name: "Java",
+      icon: <FaJava className="text-7xl text-red-500" />,
+    },
+    {
+      name: "HTML5",
+      icon: <FaHtml5 className="text-7xl text-orange-500" />,
+    },
+    {
+      name: "CSS3",
+      icon: <FaCss3Alt className="text-7xl text-blue-500" />,
+    },
+    {
+      name: "Vite",
+      icon: <SiVite className="text-7xl text-purple-500" />,
+    },
+    {
+      name: "NPM",
+      icon: <SiNpm className="text-7xl text-red-600" />,
+    },
+    {
+      name: "Git",
+      icon: <FaGitAlt className="text-7xl text-orange-600" />,
+    },
     {
       name: "Postman",
       icon: <SiPostman className="text-7xl text-orange-400" />,
     },
 
     // DevOps & Cloud
-    { name: "Docker", icon: <FaDocker className="text-7xl text-sky-500" /> },
-    { name: "Linux", icon: <FaLinux className="text-7xl text-gray-200" /> },
-    { name: "AWS", icon: <FaAws className="text-7xl text-orange-400" /> },
+    {
+      name: "Docker",
+      icon: <FaDocker className="text-7xl text-sky-500" />,
+    },
+    {
+      name: "Linux",
+      icon: <FaLinux className="text-7xl text-gray-200" />,
+    },
+    {
+      name: "AWS",
+      icon: <FaAws className="text-7xl text-orange-400" />,
+    },
     {
       name: "GitHub",
       icon: <TbBrandGithub className="text-7xl text-white" />,
@@ -94,16 +123,12 @@ const Technologies = () => {
       icon: <SiGithubactions className="text-7xl text-blue-400" />,
     },
     {
-      name: "Kubernetes",
-      icon: <SiKubernetes className="text-7xl text-blue-500" />,
+      name: "Vercel",
+      icon: <SiVercel className="text-7xl text-white" />,
     },
     {
-      name: "Terraform",
-      icon: <SiTerraform className="text-7xl text-purple-400" />,
-    },
-    {
-      name: "Ansible",
-      icon: <SiAnsible className="text-7xl text-red-500" />,
+      name: "Zod",
+      icon: <SiZod className="text-7xl text-blue-500" />,
     },
     {
       name: "Cloudflare",
@@ -127,7 +152,7 @@ const Technologies = () => {
         transition={{ duration: 1.5 }}
         className="my-20 text-center text-4xl font-semibold"
       >
-        My Technologies
+        My Tech Stack
       </motion.h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 justify-items-center">
@@ -148,3 +173,4 @@ const Technologies = () => {
 };
 
 export default Technologies;
+

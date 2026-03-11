@@ -84,22 +84,40 @@ const Hero = () => {
             {HERO_CONTENT}
           </motion.p>
 
-          {/* CTA */}
-          <motion.a
+          {/* CTA BUTTONS */}
+          <motion.div
             variants={childVariants}
-            href="/Vinay_Kumar_resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            download
-            className="
-              mt-8 inline-block rounded-full
-              bg-stone-100 px-6 py-3
-              text-sm font-medium text-stone-900
-              shadow hover:bg-stone-200 transition
-            "
+            className="mt-8 flex flex-col sm:flex-row gap-4"
           >
-            Download Resume
-          </motion.a>
+            {/* Preview Resume */}
+            <a
+              href="/Vinay_Kumar_resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+      rounded-full border border-stone-300
+      px-6 py-3 text-sm font-medium
+      text-stone-200
+      hover:bg-stone-800 transition
+    "
+            >
+              Preview Resume
+            </a>
+
+            {/* Download Resume */}
+            <a
+              href="/Vinay_Kumar_resume.pdf"
+              download
+              className="
+      rounded-full bg-stone-100
+      px-6 py-3 text-sm font-medium
+      text-stone-900
+      shadow hover:bg-stone-200 transition
+    "
+            >
+              Download Resume
+            </a>
+          </motion.div>
         </motion.div>
 
         {/* RIGHT CONTENT */}

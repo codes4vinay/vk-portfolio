@@ -43,7 +43,7 @@ const Navbar = () => {
             Projects
           </a>
           <a href="#technologies" className="hover:text-stone-300 transition">
-            Technologies
+            Tech Stack
           </a>
           <a href="#contact" className="hover:text-stone-300 transition">
             Contact

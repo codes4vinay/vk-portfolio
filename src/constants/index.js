@@ -51,7 +51,7 @@ export const PROJECTS = [
       "A platform for uploading and sharing files securely with features like link sharing, QR code generation, and email-based sharing.",
     technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
     github: "https://github.com/codes4vinay/filespire",
-    demo: "https://filespire.pages.dev/", // change if different
+    demo: "https://filespire.pages.dev/",
   },
   {
     title: "Auto Reload NPM Package",
@@ -60,23 +60,33 @@ export const PROJECTS = [
       "An npm package that automatically reloads a rendered website every 15 minutes to prevent the deployed site from going down.",
     technologies: ["Node.js", "JavaScript", "npm"],
     github: "https://github.com/codes4vinay/keep-alive-reloader",
-    demo: "https://www.npmjs.com/package/keep-alive-reloader", // replace with actual npm link
+    demo: "https://www.npmjs.com/package/keep-alive-reloader",
   },
   {
     title: "AI Thumbnail Generator",
-    image: project3, // replace with AI thumbnail image if available
+    image: project3,
     description:
       "An AI-powered tool that generates eye-catching thumbnails using prompt-based inputs, built for content creators and social media platforms.",
     technologies: ["React", "Node.js", "AI APIs", "JavaScript"],
-    github: "https://github.com/codes4vinay/",
-    demo: "/", // replace if different
+    github: "https://github.com/codes4vinay/Thumblify",
+    demo: "https://thumblify-ai.vercel.app/",
+  },
+  {
+    title: "Auth7 Kit - Authentication Library",
+    image: project4,
+    description:
+      "Auth7 Kit is a plug-and-play authentication system for Node.js and Express. It provides secure cookie-based JWT authentication with access and refresh tokens, email verification, password reset, dynamic user schema support, and session invalidation. Designed to simplify authentication setup for modern web applications.",
+    technologies: [
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "JWT",
+      "Authentication",
+      "npm Package"
+    ],
+    github: "https://github.com/codes4vinay/auth7",
+    demo: "https://www.npmjs.com/package/auth7-kit",
   },
 ];
 
 
-// Contact section - empty for privacy
-export const CONTACT = {
-  address: "",
-  phoneNo: "",
-  email: "",
-};
