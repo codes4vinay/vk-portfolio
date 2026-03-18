@@ -1,11 +1,9 @@
 import project1 from "../assets/projects/project-1.webp";
-import project2 from "../assets/projects/project-2.webp"; // you can replace this with an image for your npm package
+import project2 from "../assets/projects/project-2.webp";
 import project3 from "../assets/projects/project-3.webp";
 import project4 from "../assets/projects/project-4.webp";
 
-export const HERO_CONTENT = `Hi, I’m Vinay Kumar, a MERN Stack Developer with a growing focus on DevOps practices. I build full-stack web applications using MongoDB, Express, React, and Node.js, and I’m actively learning how to deploy, automate, and manage them using Docker, Linux, CI/CD pipelines, and cloud platforms. I enjoy improving both code quality and system reliability.`;
-
-
+export const HERO_CONTENT = `Hi, I'm Vinay Kumar, a MERN Stack Developer with a growing focus on DevOps practices. I build full-stack web applications using MongoDB, Express, React, and Node.js, and I'm actively learning how to deploy, automate, and manage them using Docker, Linux, CI/CD pipelines, and cloud platforms. I enjoy improving both code quality and system reliability.`;
 
 // About section about you
 export const ABOUT_TEXT = `I am Vinay Kumar, a MERN Stack Developer with a strong interest in DevOps and cloud-native technologies. I have built full-stack applications using MongoDB, Express, React, and Node.js, focusing on performance, security, and scalability. Alongside development, I work with Docker, Linux, CI/CD pipelines, and cloud platforms to deploy and manage applications. I enjoy learning new technologies and building systems that are reliable and production-ready.`;
@@ -42,32 +40,31 @@ export const EXPERIENCES = [
 ];
 
 // Your projects
-// Your projects
 export const PROJECTS = [
   {
-    title: "Filespire - File Sharing Platform",
+    title: "Mendly - Electronics Repair & Marketplace",
     image: project1,
+    description:
+      "A full-stack MERN platform connecting customers with verified service centres for electronics repair. Features real-time chat with Socket.IO, Razorpay payment integration with HMAC verification, role-based access control (user, technician, admin), and MongoDB compound indexes for optimization. Includes secure JWT authentication with httpOnly cookies, Azure deployment, and comprehensive admin dashboard.",
+    technologies: ["React", "Node.js", "MongoDB", "Socket.IO", "Razorpay", "Express", "Redux Toolkit", "TailwindCSS", "Azure"],
+    github: "https://github.com/codes4vinay/mendly",
+    demo: "https://mendly.vinaydev.in/",
+  },
+  {
+    title: "Filespire - File Sharing Platform",
+    image: project2,
     description:
       "A platform for uploading and sharing files securely with features like link sharing, QR code generation, and email-based sharing.",
     technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
     github: "https://github.com/codes4vinay/filespire",
-    demo: "https://filespire.pages.dev/", // change if different
-  },
-  {
-    title: "Auto Reload NPM Package",
-    image: project2,
-    description:
-      "An npm package that automatically reloads a rendered website every 15 minutes to prevent the deployed site from going down.",
-    technologies: ["Node.js", "JavaScript", "npm"],
-    github: "https://github.com/codes4vinay/keep-alive-reloader",
-    demo: "https://www.npmjs.com/package/keep-alive-reloader",
+    demo: "https://filespire.in/",
   },
   {
     title: "AI Thumbnail Generator",
     image: project3,
     description:
-      "An AI-powered tool that generates eye-catching thumbnails using prompt-based inputs, built for content creators and social media platforms.",
-    technologies: ["React", "Node.js", "AI APIs", "JavaScript"],
+      "An AI-powered tool that generates eye-catching thumbnails using Google Gemini API for intelligent design suggestions. Built for content creators and social media platforms with real-time preview and one-click download functionality.",
+    technologies: ["React", "Node.js", "Gemini API", "JavaScript", "TailwindCSS", "Vercel"],
     github: "https://github.com/codes4vinay/Thumblify",
     demo: "https://thumblify-ai.vercel.app/",
   },
@@ -88,5 +85,3 @@ export const PROJECTS = [
     demo: "https://www.npmjs.com/package/auth7-kit",
   },
 ];
-
-
