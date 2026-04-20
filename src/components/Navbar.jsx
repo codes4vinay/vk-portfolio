@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaGithub,
   FaInstagram,
@@ -7,13 +7,48 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { SiHashnode } from "react-icons/si";
 import logo from "../assets/projects/image.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "technologies", label: "Tech Stack" },
+    { id: "projects", label: "Projects" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navLinks
+        .map((link) => document.getElementById(link.id))
+        .filter(Boolean);
+
+      const scrollPosition = window.scrollY + 140;
+
+      let currentSection = "home";
+
+      sections.forEach((section) => {
+        if (section.offsetTop <= scrollPosition) {
+          currentSection = section.id;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <nav className="sticky top-0 z-50  backdrop-blur-md">
+    <nav className="fixed inset-x-0 top-0 z-50 bg-black/20 backdrop-blur-md">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <a href="#home" aria-label="Home">
@@ -30,24 +65,24 @@ const Navbar = () => {
             text-sm font-medium text-white
           "
         >
-          <a
-            href="#home"
-            className="px-4 py-1 rounded-full bg-white/10 hover:bg-white/20 transition"
-          >
-            Home
-          </a>
-          <a href="#about" className="hover:text-stone-300 transition">
-            About
-          </a>
-          <a href="#projects" className="hover:text-stone-300 transition">
-            Projects
-          </a>
-          <a href="#technologies" className="hover:text-stone-300 transition">
-            Tech Stack
-          </a>
-          <a href="#contact" className="hover:text-stone-300 transition">
-            Contact
-          </a>
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+
+            return (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={() => setActiveSection(link.id)}
+                className={`rounded-full px-4 py-1 transition ${
+                  isActive
+                    ? "bg-white/10 text-white"
+                    : "text-white hover:bg-white/10 hover:text-stone-300"
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </div>
 
         {/* Socials (desktop only) */}
@@ -80,6 +115,13 @@ const Navbar = () => {
           >
             <FaTwitter />
           </a>
+          <a
+            href="https://hashnode.com/@vinayislive"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <SiHashnode />
+          </a>
         </div>
 
         {/* Mobile Hamburger */}
@@ -104,41 +146,25 @@ const Navbar = () => {
               p-6 text-white
             "
           >
-            <a
-              href="#home"
-              onClick={() => setOpen(false)}
-              className="hover:text-stone-300"
-            >
-              Home
-            </a>
-            <a
-              href="#about"
-              onClick={() => setOpen(false)}
-              className="hover:text-stone-300"
-            >
-              About
-            </a>
-            <a
-              href="#projects"
-              onClick={() => setOpen(false)}
-              className="hover:text-stone-300"
-            >
-              Projects
-            </a>
-            <a
-              href="#technologies"
-              onClick={() => setOpen(false)}
-              className="hover:text-stone-300"
-            >
-              Technologies
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="hover:text-stone-300"
-            >
-              Contact
-            </a>
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+
+              return (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  onClick={() => {
+                    setActiveSection(link.id);
+                    setOpen(false);
+                  }}
+                  className={
+                    isActive ? "text-stone-200" : "hover:text-stone-300"
+                  }
+                >
+                  {link.label}
+                </a>
+              );
+            })}
 
             {/* Mobile Socials */}
             <div className="flex gap-4 pt-4 text-xl">
@@ -169,6 +195,13 @@ const Navbar = () => {
                 rel="noreferrer"
               >
                 <FaTwitter />
+              </a>
+              <a
+                href="https://hashnode.com/@codes4vinay"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <SiHashnode />
               </a>
             </div>
           </div>

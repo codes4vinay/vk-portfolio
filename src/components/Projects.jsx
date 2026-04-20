@@ -25,7 +25,7 @@ const techVariants = {
 
 const Projects = () => {
   return (
-    <section id="projects" className="scroll-mt-24 pb-24">
+    <section id="projects" className="scroll-mt-28 pb-24">
       {/* Section Title */}
       <motion.h2
         initial={{ opacity: 0, y: -30 }}
@@ -67,9 +67,14 @@ const Projects = () => {
               <div className="w-full lg:w-2/3">
                 <h3 className="text-2xl font-semibold mb-2">{project.title}</h3>
 
-                <p className="text-stone-400 mb-4 leading-relaxed">
-                  {project.description}
-                </p>
+                <ul className="mb-4 space-y-2 text-stone-400">
+                  {project.description.map((point, pointIndex) => (
+                    <li key={pointIndex} className="flex items-start gap-3 leading-relaxed">
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-stone-400" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
 
                 {/* Tech Stack */}
                 <div className="flex flex-wrap mb-6">

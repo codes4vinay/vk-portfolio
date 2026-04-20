@@ -14,6 +14,7 @@ import {
 import {
   SiJavascript,
   SiExpress,
+  SiPython,
   SiVite,
   SiPostman,
   SiNpm,
@@ -25,21 +26,6 @@ import {
   SiZod,
 } from "react-icons/si";
 import { motion } from "framer-motion";
-
-const iconVariants = (duration, delay = 0) => ({
-  animate: {
-    y: [0, -20, 10, 0],
-    rotate: [0, 10, -10, 0],
-    scale: [1, 1.2, 1, 1.15],
-    transition: {
-      duration,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "loop",
-      delay,
-    },
-  },
-});
 
 const Technologies = () => {
   const techStack = [
@@ -71,6 +57,10 @@ const Technologies = () => {
     {
       name: "JavaScript",
       icon: <SiJavascript className="text-7xl text-yellow-300" />,
+    },
+    {
+      name: "Python",
+      icon: <SiPython className="text-7xl text-blue-400" />,
     },
     {
       name: "Java",
@@ -145,7 +135,7 @@ const Technologies = () => {
   ];
 
   return (
-    <div id="technologies" className="pb-24">
+    <div id="technologies" className="scroll-mt-28 pb-24">
       <motion.h2
         whileInView={{ opacity: 1, y: 0 }}
         initial={{ opacity: 0, y: -100 }}
@@ -159,9 +149,11 @@ const Technologies = () => {
         {techStack.map((tech, index) => (
           <motion.div
             key={index}
-            className="flex flex-col items-center gap-2 hover:scale-110 transition-transform duration-300"
-            variants={iconVariants(2 + index * 0.1, index * 0.1)}
-            animate="animate"
+            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.45, delay: index * 0.04 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="flex flex-col items-center gap-2 transition-transform duration-300 hover:scale-105"
           >
             {tech.icon}
             <p className="text-sm text-gray-300">{tech.name}</p>

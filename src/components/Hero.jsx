@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HERO_CONTENT } from "../constants";
 import { motion } from "framer-motion";
 
@@ -24,9 +24,175 @@ const childVariants = {
   },
 };
 
+const GITHUB_USERNAME = "codes4vinay";
+const CONTRIBUTION_COLORS = [
+  "#161b22",
+  "#0e4429",
+  "#006d32",
+  "#26a641",
+  "#39d353",
+];
+const CELL_SIZE = 10;
+const CELL_GAP = 3;
+const WEEKDAY_LABELS = [
+  { label: "Mon", row: 1 },
+  { label: "Wed", row: 3 },
+  { label: "Fri", row: 5 },
+];
+const FALLBACK_YEARS = ["2026", "2025", "2024"];
+
+const formatUtcDate = (date) => date.toISOString().slice(0, 10);
+
+const getUtcDate = (year, month, day) =>
+  new Date(Date.UTC(year, month, day, 12, 0, 0));
+
+const addUtcDays = (date, days) => {
+  const next = new Date(date);
+  next.setUTCDate(next.getUTCDate() + days);
+  return next;
+};
+
+const buildContributionCalendar = (year, contributions) => {
+  const dailyMap = new Map(
+    contributions.map((entry) => [entry.date, entry])
+  );
+
+  const yearStart = getUtcDate(year, 0, 1);
+  const yearEnd = getUtcDate(year, 11, 31);
+  const gridStart = addUtcDays(yearStart, -yearStart.getUTCDay());
+  const gridEnd = addUtcDays(yearEnd, 6 - yearEnd.getUTCDay());
+
+  const days = [];
+
+  for (
+    let current = new Date(gridStart);
+    current <= gridEnd;
+    current = addUtcDays(current, 1)
+  ) {
+    const isoDate = formatUtcDate(current);
+    const contribution = dailyMap.get(isoDate);
+    const isCurrentYear = current.getUTCFullYear() === year;
+
+    days.push({
+      date: isoDate,
+      count: contribution?.count ?? 0,
+      level: contribution?.level ?? 0,
+      isCurrentYear,
+    });
+  }
+
+  const weeks = [];
+
+  for (let index = 0; index < days.length; index += 7) {
+    weeks.push(days.slice(index, index + 7));
+  }
+
+  const monthLabels = [];
+
+  for (let month = 0; month < 12; month += 1) {
+    const firstOfMonth = getUtcDate(year, month, 1);
+    const weekIndex = Math.floor(
+      (firstOfMonth.getTime() - gridStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
+    );
+
+    monthLabels.push({
+      name: firstOfMonth.toLocaleString("en-US", {
+        month: "short",
+        timeZone: "UTC",
+      }),
+      weekIndex,
+    });
+  }
+
+  return { weeks, monthLabels };
+};
+
 const Hero = () => {
+  const [contributionData, setContributionData] = useState(null);
+  const [selectedYear, setSelectedYear] = useState("2026");
+  const [loadingContributions, setLoadingContributions] = useState(true);
+  const [contributionError, setContributionError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadContributions = async () => {
+      try {
+        setLoadingContributions(true);
+        setContributionError("");
+
+        const response = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Unable to load contribution data.");
+        }
+
+        const data = await response.json();
+
+        if (!isMounted) {
+          return;
+        }
+
+        const availableYears = Object.keys(data.total ?? {})
+          .sort((left, right) => Number(right) - Number(left))
+          .slice(0, 3);
+
+        setContributionData(data);
+
+        if (availableYears.length > 0) {
+          setSelectedYear((currentYear) =>
+            availableYears.includes(currentYear)
+              ? currentYear
+              : availableYears[0]
+          );
+        }
+      } catch (error) {
+        if (!isMounted) {
+          return;
+        }
+
+        setContributionError("Contribution calendar is unavailable right now.");
+      } finally {
+        if (isMounted) {
+          setLoadingContributions(false);
+        }
+      }
+    };
+
+    loadContributions();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const fetchedYears = Object.keys(contributionData?.total ?? {})
+    .sort((left, right) => Number(right) - Number(left))
+    .slice(0, 3);
+
+  const availableYears =
+    fetchedYears.length > 0 ? fetchedYears : FALLBACK_YEARS;
+
+  const selectedYearContributions =
+    contributionData?.contributions?.filter(
+      (entry) => new Date(entry.date).getUTCFullYear() === Number(selectedYear)
+    ) ?? [];
+
+  const { weeks, monthLabels } = buildContributionCalendar(
+    Number(selectedYear),
+    selectedYearContributions
+  );
+
+  const selectedYearTotal =
+    contributionData?.total?.[selectedYear] ??
+    selectedYearContributions.reduce((sum, entry) => sum + entry.count, 0);
+
+  const calendarWidth = weeks.length * CELL_SIZE + (weeks.length - 1) * CELL_GAP;
+
   return (
-    <section id="about" className=" mt-12 pb-12 lg:pb-32">
+    <section id="about" className="mt-12 scroll-mt-28 pb-12 lg:pb-32">
       <div className="flex flex-col-reverse lg:flex-row items-center gap-10">
         {/* LEFT CONTENT */}
         <motion.div
@@ -59,7 +225,7 @@ const Hero = () => {
   tracking-wide
 "
           >
-            MERN Stack Developer · DevOps Enthusiast
+            MERN Stack Developer | GenAI
           </motion.span>
 
           {/* ACCENT LINE */}
@@ -125,9 +291,9 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="w-full lg:w-1/2 flex justify-center lg:justify-end px-4"
+          className="w-full lg:w-1/2 flex justify-center px-4"
         >
-          <div className="relative">
+          <div className="relative w-full">
             {/* BACKDROP */}
             <div
               className="
@@ -137,23 +303,183 @@ const Hero = () => {
               "
             />
 
-            {/* LINKEDIN BADGE */}
-            <div
-              className="relative badge-base LI-profile-badge"
-              data-locale="en_US"
-              data-size="large"
-              data-theme="dark"
-              data-type="HORIZONTAL"
-              data-vanity="vinaykumar2004"
-              data-version="v1"
-            >
-              <a
-                className="badge-base__link LI-simple-link"
-                href="https://in.linkedin.com/in/vinaykumar2004"
-                target="_blank"
-                rel="noopener noreferrer"
-              ></a>
+            {/* GITHUB CONTRIBUTIONS GRAPH */}
+            <div className="relative mx-auto w-full max-w-[780px] overflow-hidden rounded-3xl border border-[#30363d] bg-[#0d1117] p-5 shadow-2xl shadow-black/40 sm:p-6">
+              <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                <div>
+                  <h2 className="text-lg font-medium text-[#f0f6fc] sm:text-xl">
+                    {selectedYearTotal} contributions in {selectedYear}
+                  </h2>
+                  <p className="mt-1 text-sm text-[#8b949e]">
+                    GitHub contributions for @{GITHUB_USERNAME}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {availableYears.map((year) => {
+                    const isActive = selectedYear === year;
+
+                    return (
+                      <button
+                        key={year}
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setSelectedYear(year);
+                        }}
+                        className={`rounded-md border px-3 py-1.5 text-xs font-medium transition sm:text-sm ${
+                          isActive
+                            ? "border-[#2ea043] bg-[#1f6feb]/10 text-[#f0f6fc]"
+                            : "border-[#30363d] bg-[#161b22] text-[#8b949e] hover:border-[#3d444d] hover:text-[#c9d1d9]"
+                        }`}
+                        aria-pressed={isActive}
+                      >
+                        {year}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-[#30363d] bg-[#0d1117] p-4 sm:p-6">
+                <div className="mb-3 flex items-center justify-between text-xs text-[#8b949e]">
+                  <a
+                    href={`https://github.com/${GITHUB_USERNAME}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="transition hover:text-[#c9d1d9]"
+                  >
+                    View profile
+                  </a>
+                  <span>Contribution settings</span>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-[#21262d] bg-[#0b0f14] p-4 sm:p-5">
+                  <div className="min-w-[680px] sm:min-w-[720px]">
+                    <div className="mb-3 grid grid-cols-[40px_1fr] gap-3">
+                      <div />
+                      <div
+                        className="relative h-5 text-xs text-[#8b949e]"
+                        style={{
+                          width: `${calendarWidth}px`,
+                        }}
+                      >
+                        {monthLabels.map((month) => (
+                          <span
+                            key={`${month.name}-${month.weekIndex}`}
+                            className="absolute top-0"
+                            style={{
+                              left: `${month.weekIndex * (CELL_SIZE + CELL_GAP)}px`,
+                            }}
+                          >
+                            {month.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-[40px_1fr] gap-3">
+                      <div
+                        className="grid pt-[1px] text-[10px] text-[#8b949e]"
+                        style={{
+                          gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
+                          rowGap: `${CELL_GAP}px`,
+                        }}
+                      >
+                        {Array.from({ length: 7 }).map((_, rowIndex) => {
+                          const label = WEEKDAY_LABELS.find(
+                            (day) => day.row === rowIndex
+                          );
+
+                          return (
+                            <span
+                              key={`weekday-${rowIndex}`}
+                              className="flex items-center"
+                              style={{ height: `${CELL_SIZE}px` }}
+                            >
+                              {label?.label ?? ""}
+                            </span>
+                          );
+                        })}
+                      </div>
+
+                      <div
+                        className="flex"
+                        style={{ columnGap: `${CELL_GAP}px` }}
+                      >
+                        {weeks.map((week, weekIndex) => (
+                          <div
+                            key={`week-${weekIndex}`}
+                            className="grid"
+                            style={{
+                              gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
+                              rowGap: `${CELL_GAP}px`,
+                            }}
+                          >
+                            {week.map((day) => {
+                              const backgroundColor = day.isCurrentYear
+                                ? CONTRIBUTION_COLORS[day.level] ??
+                                  CONTRIBUTION_COLORS[0]
+                                : "#0d1117";
+
+                              return (
+                                <span
+                                  key={day.date}
+                                  title={`${day.count} contributions on ${day.date}`}
+                                  className="rounded-[2px] border border-black/10"
+                                  style={{
+                                    backgroundColor,
+                                    width: `${CELL_SIZE}px`,
+                                    height: `${CELL_SIZE}px`,
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-col gap-3 text-xs text-[#8b949e] sm:flex-row sm:items-center sm:justify-between">
+                  <a
+                    href="https://docs.github.com/en/account-and-profile/concepts/contributions-on-your-profile"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="transition hover:text-[#c9d1d9]"
+                  >
+                  </a>
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                    <span>Less</span>
+                    <div className="flex items-center gap-1">
+                      {CONTRIBUTION_COLORS.map((color) => (
+                        <span
+                          key={color}
+                          className="h-3.5 w-3.5 rounded-sm"
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                    <span>More</span>
+                  </div>
+                </div>
+
+                {loadingContributions && (
+                  <p className="mt-4 text-xs text-[#8b949e]">
+                    Loading contribution activity...
+                  </p>
+                )}
+
+                {contributionError && (
+                  <p className="mt-4 text-xs text-rose-400">
+                    {contributionError}
+                  </p>
+                )}
+              </div>
             </div>
+
           </div>
         </motion.div>
       </div>

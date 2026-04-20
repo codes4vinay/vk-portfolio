@@ -3,7 +3,7 @@ import project2 from "../assets/projects/project-2.webp";
 import project3 from "../assets/projects/project-3.webp";
 import project4 from "../assets/projects/project-4.webp";
 
-export const HERO_CONTENT = `Hi, I'm Vinay Kumar, a MERN Stack Developer with a growing focus on DevOps practices. I build full-stack web applications using MongoDB, Express, React, and Node.js, and I'm actively learning how to deploy, automate, and manage them using Docker, Linux, CI/CD pipelines, and cloud platforms. I enjoy improving both code quality and system reliability.`;
+export const HERO_CONTENT = `Hi, I'm Vinay Kumar, a MERN Stack Developer with a strong interest in GenAI and modern cloud-powered applications. I build full-stack web experiences using MongoDB, Express, React, and Node.js, and I also work with Docker and AWS to containerize, deploy, and manage scalable projects. I enjoy combining clean development practices with intelligent features to build applications that are practical, reliable, and future-ready.`;
 
 // About section about you
 export const ABOUT_TEXT = `I am Vinay Kumar, a MERN Stack Developer with a strong interest in DevOps and cloud-native technologies. I have built full-stack applications using MongoDB, Express, React, and Node.js, focusing on performance, security, and scalability. Alongside development, I work with Docker, Linux, CI/CD pipelines, and cloud platforms to deploy and manage applications. I enjoy learning new technologies and building systems that are reliable and production-ready.`;
@@ -44,26 +44,26 @@ export const PROJECTS = [
   {
     title: "Mendly - Electronics Repair & Marketplace",
     image: project1,
-    description:
-      "A full-stack MERN platform connecting customers with verified service centres for electronics repair. Features real-time chat with Socket.IO, Razorpay payment integration with HMAC verification, role-based access control (user, technician, admin), and MongoDB compound indexes for optimization. Includes secure JWT authentication with httpOnly cookies, Azure deployment, and comprehensive admin dashboard.",
+    description: [
+      "Built a full-stack MERN platform connecting customers with verified electronics repair service centres.",
+      "Implemented real-time chat with Socket.IO and secure Razorpay payment integration with HMAC verification.",
+      "Added role-based access control for users, technicians, and admins with secure JWT auth using httpOnly cookies.",
+      "Integrated a company RAG chatbot to answer Mendly-related questions for users.",
+      "Optimized performance with MongoDB compound indexes and deployed the platform on Azure with a comprehensive admin dashboard.",
+    ],
     technologies: ["React", "Node.js", "MongoDB", "Socket.IO", "Razorpay", "Express", "Redux Toolkit", "TailwindCSS", "Azure"],
     github: "https://github.com/codes4vinay/mendly",
     demo: "https://mendly.vinaydev.in/",
   },
   {
-    title: "Filespire - File Sharing Platform",
-    image: project2,
-    description:
-      "A platform for uploading and sharing files securely with features like link sharing, QR code generation, and email-based sharing.",
-    technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
-    github: "https://github.com/codes4vinay/filespire",
-    demo: "https://filespire.in/",
-  },
-  {
     title: "AI Thumbnail Generator",
     image: project3,
-    description:
-      "An AI-powered tool that generates eye-catching thumbnails using Google Gemini API for intelligent design suggestions. Built for content creators and social media platforms with real-time preview and one-click download functionality.",
+    description: [
+      "Developed an AI-powered tool that generates eye-catching thumbnails for content creators and social media use cases.",
+      "Integrated Google Gemini API to produce intelligent design suggestions and creative variations.",
+      "Built a real-time preview workflow with a smooth interface for fast experimentation.",
+      "Added one-click download support for quickly exporting generated thumbnails.",
+    ],
     technologies: ["React", "Node.js", "Gemini API", "JavaScript", "TailwindCSS", "Vercel"],
     github: "https://github.com/codes4vinay/Thumblify",
     demo: "https://thumblify-ai.vercel.app/",
@@ -71,8 +71,12 @@ export const PROJECTS = [
   {
     title: "Auth7 Kit - Authentication Library",
     image: project4,
-    description:
-      "Auth7 Kit is a plug-and-play authentication system for Node.js and Express. It provides secure cookie-based JWT authentication with access and refresh tokens, email verification, password reset, dynamic user schema support, and session invalidation. Designed to simplify authentication setup for modern web applications.",
+    description: [
+      "Created a plug-and-play authentication library for Node.js and Express applications.",
+      "Implemented secure cookie-based JWT authentication with access tokens and refresh tokens.",
+      "Included features like email verification, password reset, session invalidation, and dynamic user schema support.",
+      "Designed the package to simplify authentication setup for modern web applications.",
+    ],
     technologies: [
       "Node.js",
       "Express",
@@ -83,5 +87,18 @@ export const PROJECTS = [
     ],
     github: "https://github.com/codes4vinay/auth7",
     demo: "https://www.npmjs.com/package/auth7-kit",
+  },
+  {
+    title: "Filespire - File Sharing Platform",
+    image: project2,
+    description: [
+      "Built a file sharing platform for uploading and distributing files securely.",
+      "Added shareable links for quick and simple file access across devices.",
+      "Integrated QR code generation to make file sharing faster and more convenient.",
+      "Included email-based sharing workflows for direct file distribution.",
+    ],
+    technologies: ["React", "Node.js", "MongoDB", "Firebase", "Express"],
+    github: "https://github.com/codes4vinay/filespire",
+    demo: "https://filespire.in/",
   },
 ];
