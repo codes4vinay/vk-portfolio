@@ -193,15 +193,28 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Hamburger */}
-        <motion.button
-          onClick={() => setOpen(!open)}
-          className="text-2xl text-slate-900 transition hover:text-violet-700 dark:text-white dark:hover:text-fuchsia-200 md:hidden"
-          aria-label="Menu"
-          whileTap={{ scale: 0.92 }}
-        >
-          {open ? <FaTimes /> : <FaBars />}
-        </motion.button>
+        <div className="flex items-center gap-3 md:hidden">
+          <motion.button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-black/5 text-stone-800 transition hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+            whileHover={{ y: -1, rotate: theme === "dark" ? -8 : 8 }}
+            whileTap={{ scale: 0.94 }}
+          >
+            {theme === "dark" ? <FaSun /> : <FaMoon />}
+          </motion.button>
+
+          {/* Mobile Hamburger */}
+          <motion.button
+            onClick={() => setOpen(!open)}
+            className="inline-flex h-10 w-10 items-center justify-center text-2xl text-slate-900 transition hover:text-violet-700 dark:text-white dark:hover:text-fuchsia-200"
+            aria-label="Menu"
+            whileTap={{ scale: 0.92 }}
+          >
+            {open ? <FaTimes /> : <FaBars />}
+          </motion.button>
+        </div>
       </div>
 
       {/* Mobile Glass Menu */}
@@ -232,19 +245,6 @@ const Navbar = () => {
               },
             }}
           >
-            <motion.button
-              type="button"
-              onClick={toggleTheme}
-              className="inline-flex items-center justify-between rounded-xl border border-black/10 bg-black/5 px-4 py-3 text-sm font-medium text-stone-900 transition hover:bg-black/10 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-              variants={{ hidden: { opacity: 0, y: -6 }, visible: { opacity: 1, y: 0 } }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>Theme</span>
-              <span className="text-base">
-                {theme === "dark" ? <FaSun /> : <FaMoon />}
-              </span>
-            </motion.button>
-
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
 
