@@ -124,6 +124,11 @@ const Blogs = ({ limit = 4 }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
+                whileHover={{
+                  y: -6,
+                  transition: { type: "spring", stiffness: 340, damping: 24 },
+                }}
+                whileTap={{ scale: 0.99 }}
                 className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 p-6 backdrop-blur-md transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
               >
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -172,4 +177,3 @@ const Blogs = ({ limit = 4 }) => {
 };
 
 export default Blogs;
-

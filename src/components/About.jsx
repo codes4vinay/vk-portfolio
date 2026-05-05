@@ -4,6 +4,11 @@ import { ABOUT_TEXT } from "../constants";
 import SectionHeading from "./SectionHeading";
 
 const About = () => {
+  const cardHover = {
+    y: -4,
+    transition: { type: "spring", stiffness: 360, damping: 24 },
+  };
+
   return (
     <section id="about" className="scroll-mt-28 pb-24 pt-4">
       <SectionHeading
@@ -19,11 +24,14 @@ const About = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.2fr_0.8fr]"
       >
-        <div className="rounded-3xl border border-black/10 bg-white/70 p-6 backdrop-blur-md dark:border-white/10 dark:bg-white/5 sm:p-8">
-          <p className="text-base leading-relaxed text-stone-700 dark:text-stone-300 sm:text-lg">
+        <motion.div
+          whileHover={cardHover}
+          className="glass-surface rounded-3xl p-6 sm:p-8"
+        >
+          <p className="relative text-base leading-relaxed text-stone-700 dark:text-stone-300 sm:text-lg">
             {ABOUT_TEXT}
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-4">
           {[
@@ -40,17 +48,18 @@ const About = () => {
               value: "Docker • CI/CD • AWS fundamentals",
             },
           ].map((item) => (
-            <div
+            <motion.div
               key={item.title}
-              className="rounded-3xl border border-black/10 bg-white/70 p-6 backdrop-blur-md dark:border-white/10 dark:bg-white/5"
+              whileHover={cardHover}
+              className="glass-surface rounded-3xl p-6"
             >
-              <p className="text-xs font-semibold tracking-[0.18em] text-stone-500 dark:text-stone-400">
+              <p className="relative text-xs font-semibold tracking-[0.18em] text-stone-500 dark:text-stone-400">
                 {item.title}
               </p>
-              <p className="mt-2 text-sm text-stone-800 dark:text-stone-200 sm:text-base">
+              <p className="relative mt-2 text-sm text-stone-800 dark:text-stone-200 sm:text-base">
                 {item.value}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </motion.div>
@@ -59,4 +68,3 @@ const About = () => {
 };
 
 export default About;
-

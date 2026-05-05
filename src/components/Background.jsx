@@ -5,7 +5,7 @@ const Background = () => {
     <div className="pointer-events-none fixed inset-0 z-0">
       {/* Light Mode - White Sphere Grid Background */}
       <div
-        className="absolute inset-0 dark:hidden"
+        className="absolute inset-0 animate-background-drift dark:hidden"
         style={{
           background: "white",
           backgroundImage: `
@@ -19,7 +19,7 @@ const Background = () => {
 
       {/* Dark Mode - Dark Sphere Grid Background */}
       <div
-        className="hidden dark:block absolute inset-0"
+        className="absolute inset-0 hidden animate-background-drift dark:block"
         style={{
           background: "#020617",
           backgroundImage: `
@@ -32,7 +32,7 @@ const Background = () => {
       />
 
       {/* Subtle Noise Overlay */}
-      <div className="absolute inset-0 opacity-[0.025] dark:opacity-[0.02] [background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%220.35%22/%3E%3C/svg%3E')]" />
+      <div className="absolute inset-0 animate-noise-shift opacity-[0.025] dark:opacity-[0.02] [background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%220.35%22/%3E%3C/svg%3E')]" />
     </div>
   );
 };

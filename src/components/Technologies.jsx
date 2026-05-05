@@ -174,6 +174,11 @@ const Technologies = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.02, ease: "easeOut" }}
+              whileHover={{
+                y: -5,
+                transition: { type: "spring", stiffness: 360, damping: 24 },
+              }}
+              whileTap={{ scale: 0.98 }}
               className="group relative overflow-hidden rounded-2xl border border-slate-900/10 bg-white/70 p-4 backdrop-blur-md transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
             >
               <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
