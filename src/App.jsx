@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import "./index.css";
 import Background from "./components/Background";
@@ -15,7 +16,12 @@ function App() {
     <div className="relative isolate min-h-screen overflow-x-hidden bg-transparent text-slate-800 antialiased selection:bg-violet-300/40 selection:text-slate-950 dark:text-slate-200 dark:selection:bg-fuchsia-400/20 dark:selection:text-slate-100">
       <Background />
       <Navbar />
-      <div className="relative z-10 mx-auto max-w-6xl px-4 pt-24 sm:px-6 lg:px-8">
+      <motion.div
+        className="relative z-10 mx-auto max-w-6xl px-4 pt-24 sm:px-6 lg:px-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.65, ease: "easeOut" }}
+      >
         <Hero />
         <About />
         <Technologies />
@@ -23,7 +29,7 @@ function App() {
         <Projects />
         <Contact />
         <Footer />
-      </div>
+      </motion.div>
     </div>
   );
 }
