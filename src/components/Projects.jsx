@@ -2,121 +2,91 @@ import React from "react";
 import { PROJECTS } from "../constants/";
 import { motion } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import SectionHeading from "./SectionHeading";
 
-// Card animation
-const projectVariants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
-  },
-};
-
-// Tech badge animation
-const techVariants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08 },
-  }),
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0 },
 };
 
 const Projects = () => {
   return (
     <section id="projects" className="scroll-mt-28 pb-24">
-      {/* Section Title */}
-      <motion.h2
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="my-20 text-center text-4xl font-semibold"
-      >
-        My Projects
-      </motion.h2>
+      <SectionHeading
+        eyebrow="WORK"
+        title="Projects I’m proud of"
+        subtitle="Selected builds with a focus on real-world UX, scalability, and clean engineering."
+      />
 
-      <div className="space-y-10">
+      <div className="mx-auto max-w-5xl">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.18 }}
+          transition={{ staggerChildren: 0.06 }}
+          className="grid gap-6 md:grid-cols-2"
+        >
         {PROJECTS.map((project, index) => (
           <motion.div
             key={index}
-            variants={projectVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="
-              mx-auto max-w-5xl
-              rounded-2xl
-              border border-white/10
-              bg-white/5 backdrop-blur-md
-              p-6
-              transition hover:bg-white/10
-            "
+            variants={itemVariants}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 backdrop-blur-md transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
           >
-            <div className="flex flex-col lg:flex-row gap-8 items-center">
-              {/* Image */}
-              <div className="w-full lg:w-1/3">
+            <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div className="absolute -inset-24 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.16),transparent_55%)]" />
+            </div>
+
+            <div className="relative">
+              <div className="overflow-hidden rounded-t-3xl border-b border-black/10 bg-black/5 dark:border-white/10 dark:bg-black/20">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="rounded-xl shadow-lg w-full object-cover"
+                  className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03] md:h-56"
+                  loading="lazy"
                 />
               </div>
 
-              {/* Content */}
-              <div className="w-full lg:w-2/3">
-                <h3 className="text-2xl font-semibold mb-2">{project.title}</h3>
+              <div className="p-6 sm:p-7">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-stone-950 dark:text-stone-100 sm:text-xl">
+                    {project.title}
+                  </h3>
+                </div>
 
-                <ul className="mb-4 space-y-2 text-stone-400">
-                  {project.description.map((point, pointIndex) => (
-                    <li key={pointIndex} className="flex items-start gap-3 leading-relaxed">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-stone-400" />
+                <ul className="mt-3 space-y-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                  {project.description.slice(0, 3).map((point, pointIndex) => (
+                    <li
+                      key={pointIndex}
+                      className="flex items-start gap-3"
+                    >
+                      <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-stone-500" />
                       <span>{point}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* Tech Stack */}
-                <div className="flex flex-wrap mb-6">
-                  {project.technologies.map((tech, i) => (
-                    <motion.span
-                      key={i}
-                      custom={i}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true }}
-                      variants={techVariants}
-                      className="
-                        mr-2 mb-2
-                        rounded-md
-                        bg-stone-800/80
-                        px-3 py-1
-                        text-xs font-medium text-stone-300
-                      "
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.technologies.slice(0, 7).map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-full border border-black/10 bg-black/5 px-3 py-1 text-xs font-medium text-stone-800 dark:border-white/10 dark:bg-black/30 dark:text-stone-200"
                     >
                       {tech}
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
 
-                {/* Links */}
-                <div className="flex gap-4">
+                <div className="mt-6 flex flex-wrap gap-3">
                   {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noreferrer"
-                      className="
-                        inline-flex items-center gap-2
-                        rounded-full
-                        border border-white/20
-                        px-4 py-2
-                        text-sm text-white
-                        hover:bg-white/10 transition
-                      "
+                      className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/5 px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-black/10 dark:border-white/15 dark:bg-black/20 dark:text-stone-100 dark:hover:bg-white/10"
                     >
                       <FaGithub />
-                      GitHub
+                      Code
                     </a>
                   )}
 
@@ -125,17 +95,10 @@ const Projects = () => {
                       href={project.demo}
                       target="_blank"
                       rel="noreferrer"
-                      className="
-                        inline-flex items-center gap-2
-                        rounded-full
-                        bg-white text-black
-                        px-4 py-2
-                        text-sm font-medium
-                        hover:bg-stone-200 transition
-                      "
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-stone-200"
                     >
                       <FaExternalLinkAlt />
-                      Live Demo
+                      Live
                     </a>
                   )}
                 </div>
@@ -143,6 +106,7 @@ const Projects = () => {
             </div>
           </motion.div>
         ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -3,10 +3,16 @@ import project2 from "../assets/projects/project-2.webp";
 import project3 from "../assets/projects/project-3.webp";
 import project4 from "../assets/projects/project-4.webp";
 
-export const HERO_CONTENT = `Hi, I'm Vinay Kumar, a MERN Stack Developer with a strong interest in GenAI and modern cloud-powered applications. I build full-stack web experiences using MongoDB, Express, React, and Node.js, and I also work with Docker and AWS to containerize, deploy, and manage scalable projects. I enjoy combining clean development practices with intelligent features to build applications that are practical, reliable, and future-ready.`;
+export const HERO_CONTENT = `Full Stack Developer building secure APIs, realtime systems, with GenAI/RAG features that ship. I enjoy web development, scaling services, and deploying production-ready apps.`;
+
+export const HERO_HIGHLIGHTS = [
+ 
+];
 
 // About section about you
-export const ABOUT_TEXT = `I am Vinay Kumar, a MERN Stack Developer with a strong interest in DevOps and cloud-native technologies. I have built full-stack applications using MongoDB, Express, React, and Node.js, focusing on performance, security, and scalability. Alongside development, I work with Docker, Linux, CI/CD pipelines, and cloud platforms to deploy and manage applications. I enjoy learning new technologies and building systems that are reliable and production-ready.`;
+export const ABOUT_TEXT = `I’m Vinay Kumar, a full stack developer with a strong interest in GenAI and cloud-native engineering. I build secure APIs, design scalable data models, and ship production-ready services with Docker and CI/CD. Lately I’ve been exploring RAG systems using vector databases and knowledge graphs (Pinecone + Neo4j), and agent workflows using LangChain/LangGraph with LangSmith for evaluation and observability.`;
+
+export const HASHNODE_USERNAME = "vinayislive";
 
 // Your work experiences
 export const EXPERIENCES = [

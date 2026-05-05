@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HERO_CONTENT } from "../constants";
+import { HERO_CONTENT, HERO_HIGHLIGHTS } from "../constants";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -26,11 +26,11 @@ const childVariants = {
 
 const GITHUB_USERNAME = "codes4vinay";
 const CONTRIBUTION_COLORS = [
-  "#161b22",
-  "#0e4429",
-  "#006d32",
-  "#26a641",
-  "#39d353",
+  "var(--contribution-level-0)",
+  "var(--contribution-level-1)",
+  "var(--contribution-level-2)",
+  "var(--contribution-level-3)",
+  "var(--contribution-level-4)",
 ];
 const CELL_SIZE = 10;
 const CELL_GAP = 3;
@@ -192,7 +192,7 @@ const Hero = () => {
   const calendarWidth = weeks.length * CELL_SIZE + (weeks.length - 1) * CELL_GAP;
 
   return (
-    <section id="about" className="mt-12 scroll-mt-28 pb-12 lg:pb-32">
+    <section id="home" className="mt-6 scroll-mt-28 pb-16 lg:pb-28">
       <div className="flex flex-col-reverse lg:flex-row items-center gap-10">
         {/* LEFT CONTENT */}
         <motion.div
@@ -205,7 +205,8 @@ const Hero = () => {
           <motion.h1
             variants={childVariants}
             className="
-              bg-gradient-to-r from-stone-100 via-stone-300 to-stone-500
+              bg-gradient-to-r from-slate-950 via-violet-700 to-fuchsia-600
+              dark:from-stone-100 dark:via-stone-300 dark:to-fuchsia-300
               bg-clip-text text-transparent
               text-4xl sm:text-5xl lg:text-7xl
               font-bold tracking-tight
@@ -219,13 +220,14 @@ const Hero = () => {
             variants={childVariants}
             className="
   mt-3 inline-block
-  bg-gradient-to-r from-stone-400 via-stone-400 to-stone-400
+  bg-gradient-to-r from-slate-700 via-violet-700 to-fuchsia-600
+  dark:from-stone-300 dark:via-stone-300 dark:to-stone-400
   bg-clip-text text-transparent
   text-lg sm:text-xl lg:text-2xl
   tracking-wide
 "
           >
-            MERN Stack Developer | GenAI
+            Full Stack Developer • DevOps • GenAI
           </motion.span>
 
           {/* ACCENT LINE */}
@@ -233,7 +235,7 @@ const Hero = () => {
             variants={childVariants}
             className="
               mt-4 h-px w-24
-              bg-gradient-to-r from-stone-300 to-transparent
+              bg-gradient-to-r from-violet-500 to-transparent dark:from-stone-300
             "
           />
 
@@ -244,11 +246,23 @@ const Hero = () => {
               mt-6 max-w-xl
               text-base sm:text-lg lg:text-xl
               leading-relaxed
-              text-stone-300
+              text-stone-700 dark:text-stone-300
             "
           >
             {HERO_CONTENT}
           </motion.p>
+
+          <motion.ul
+            variants={childVariants}
+            className="mt-6 grid max-w-xl gap-2 text-sm text-stone-700 dark:text-stone-300 sm:text-base"
+          >
+            {HERO_HIGHLIGHTS.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-stone-500" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </motion.ul>
 
           {/* CTA BUTTONS */}
           <motion.div
@@ -261,10 +275,11 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="
-      rounded-full border border-stone-300
+      rounded-full border border-slate-900/15 bg-white/60
       px-6 py-3 text-sm font-medium
-      text-stone-200
-      hover:bg-stone-800 transition
+      text-slate-900 backdrop-blur-md
+      hover:bg-white transition
+      dark:border-stone-300 dark:bg-transparent dark:text-stone-200 dark:hover:bg-stone-800
     "
             >
               Preview Resume
@@ -275,10 +290,11 @@ const Hero = () => {
               href="/Vinay_Kumar_resume.pdf"
               download
               className="
-      rounded-full bg-stone-100
+      rounded-full bg-slate-950
       px-6 py-3 text-sm font-medium
-      text-stone-900
-      shadow hover:bg-stone-200 transition
+      text-white
+      shadow hover:bg-violet-700 transition
+      dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200
     "
             >
               Download Resume
@@ -304,13 +320,13 @@ const Hero = () => {
             />
 
             {/* GITHUB CONTRIBUTIONS GRAPH */}
-            <div className="relative mx-auto w-full max-w-[780px] overflow-hidden rounded-3xl border border-[#30363d] bg-[#0d1117] p-5 shadow-2xl shadow-black/40 sm:p-6">
+            <div className="relative mx-auto w-full max-w-[780px] overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/20 dark:border-[#30363d] dark:bg-[#0d1117] dark:shadow-black/40 sm:p-6">
               <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div>
-                  <h2 className="text-lg font-medium text-[#f0f6fc] sm:text-xl">
+                  <h2 className="text-lg font-medium text-slate-950 dark:text-[#f0f6fc] sm:text-xl">
                     {selectedYearTotal} contributions in {selectedYear}
                   </h2>
-                  <p className="mt-1 text-sm text-[#8b949e]">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-[#8b949e]">
                     GitHub contributions for @{GITHUB_USERNAME}
                   </p>
                 </div>
@@ -330,8 +346,8 @@ const Hero = () => {
                         }}
                         className={`rounded-md border px-3 py-1.5 text-xs font-medium transition sm:text-sm ${
                           isActive
-                            ? "border-[#2ea043] bg-[#1f6feb]/10 text-[#f0f6fc]"
-                            : "border-[#30363d] bg-[#161b22] text-[#8b949e] hover:border-[#3d444d] hover:text-[#c9d1d9]"
+                            ? "border-green-600 bg-green-600/10 text-slate-950 dark:border-[#2ea043] dark:bg-[#1f6feb]/10 dark:text-[#f0f6fc]"
+                            : "border-slate-300 bg-slate-100 text-slate-500 hover:border-slate-400 hover:text-slate-700 dark:border-[#30363d] dark:bg-[#161b22] dark:text-[#8b949e] dark:hover:border-[#3d444d] dark:hover:text-[#c9d1d9]"
                         }`}
                         aria-pressed={isActive}
                       >
@@ -342,25 +358,25 @@ const Hero = () => {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-[#30363d] bg-[#0d1117] p-4 sm:p-6">
-                <div className="mb-3 flex items-center justify-between text-xs text-[#8b949e]">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-[#30363d] dark:bg-[#0d1117] sm:p-6">
+                <div className="mb-3 flex items-center justify-between text-xs text-slate-500 dark:text-[#8b949e]">
                   <a
                     href={`https://github.com/${GITHUB_USERNAME}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="transition hover:text-[#c9d1d9]"
+                    className="transition hover:text-slate-900 dark:hover:text-[#c9d1d9]"
                   >
                     View profile
                   </a>
                   <span>Contribution settings</span>
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-[#21262d] bg-[#0b0f14] p-4 sm:p-5">
+                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-[#21262d] dark:bg-[#0b0f14] sm:p-5">
                   <div className="min-w-[680px] sm:min-w-[720px]">
                     <div className="mb-3 grid grid-cols-[40px_1fr] gap-3">
                       <div />
                       <div
-                        className="relative h-5 text-xs text-[#8b949e]"
+                        className="relative h-5 text-xs text-slate-500 dark:text-[#8b949e]"
                         style={{
                           width: `${calendarWidth}px`,
                         }}
@@ -381,7 +397,7 @@ const Hero = () => {
 
                     <div className="grid grid-cols-[40px_1fr] gap-3">
                       <div
-                        className="grid pt-[1px] text-[10px] text-[#8b949e]"
+                        className="grid pt-[1px] text-[10px] text-slate-500 dark:text-[#8b949e]"
                         style={{
                           gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
                           rowGap: `${CELL_GAP}px`,
@@ -421,7 +437,7 @@ const Hero = () => {
                               const backgroundColor = day.isCurrentYear
                                 ? CONTRIBUTION_COLORS[day.level] ??
                                   CONTRIBUTION_COLORS[0]
-                                : "#0d1117";
+                                : "var(--contribution-empty)";
 
                               return (
                                 <span
@@ -443,12 +459,12 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3 text-xs text-[#8b949e] sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-5 flex flex-col gap-3 text-xs text-slate-500 dark:text-[#8b949e] sm:flex-row sm:items-center sm:justify-between">
                   <a
                     href="https://docs.github.com/en/account-and-profile/concepts/contributions-on-your-profile"
                     target="_blank"
                     rel="noreferrer"
-                    className="transition hover:text-[#c9d1d9]"
+                    className="transition hover:text-slate-900 dark:hover:text-[#c9d1d9]"
                   >
                   </a>
                   <div className="flex items-center gap-2 self-end sm:self-auto">
@@ -467,7 +483,7 @@ const Hero = () => {
                 </div>
 
                 {loadingContributions && (
-                  <p className="mt-4 text-xs text-[#8b949e]">
+                  <p className="mt-4 text-xs text-slate-500 dark:text-[#8b949e]">
                     Loading contribution activity...
                   </p>
                 )}
