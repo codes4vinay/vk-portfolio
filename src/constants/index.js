@@ -1,8 +1,3 @@
-import project1 from "../assets/projects/project-1.webp";
-import project2 from "../assets/projects/project-2.webp";
-import project3 from "../assets/projects/project-3.webp";
-import project4 from "../assets/projects/project-4.webp";
-
 export const HERO_CONTENT = `Full Stack Developer building secure APIs, realtime systems, with GenAI/RAG features that ship. I enjoy web development, scaling services, and deploying production-ready apps.`;
 
 export const HERO_HIGHLIGHTS = [
@@ -49,7 +44,7 @@ export const EXPERIENCES = [
 export const PROJECTS = [
   {
     title: "Mendly - Electronics Repair & Marketplace",
-    image: project1,
+    image: "/mendly.png",
     description: [
       "Built a full-stack MERN platform connecting customers with verified electronics repair service centres.",
       "Implemented real-time chat with Socket.IO and secure Razorpay payment integration with HMAC verification.",
@@ -63,7 +58,7 @@ export const PROJECTS = [
   },
   {
     title: "AI Thumbnail Generator",
-    image: project3,
+    image: "/thumblify.png",
     description: [
       "Developed an AI-powered tool that generates eye-catching thumbnails for content creators and social media use cases.",
       "Integrated Google Gemini API to produce intelligent design suggestions and creative variations.",
@@ -76,7 +71,7 @@ export const PROJECTS = [
   },
   {
     title: "Auth7 Kit - Authentication Library",
-    image: project4,
+    image: "/npm.png",
     description: [
       "Created a plug-and-play authentication library for Node.js and Express applications.",
       "Implemented secure cookie-based JWT authentication with access tokens and refresh tokens.",
@@ -96,7 +91,7 @@ export const PROJECTS = [
   },
   {
     title: "Filespire - File Sharing Platform",
-    image: project2,
+    image: "/filespire.png",
     description: [
       "Built a file sharing platform for uploading and distributing files securely.",
       "Added shareable links for quick and simple file access across devices.",
