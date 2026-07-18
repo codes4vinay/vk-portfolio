@@ -10,7 +10,7 @@ import {
   FaMoon,
   FaSun,
 } from "react-icons/fa";
-import { SiHashnode } from "react-icons/si";
+import { SiHashnode, SiLeetcode } from "react-icons/si";
 import logo from "../assets/projects/image.png";
 import { applyTheme, getInitialTheme } from "../theme";
 
@@ -23,6 +23,7 @@ const Navbar = () => {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "technologies", label: "Tech Stack" },
+    { id: "experience", label: "Experience" },
     { id: "blogs", label: "Blogs" },
     { id: "projects", label: "Projects" },
     { id: "contact", label: "Contact" },
@@ -68,11 +69,12 @@ const Navbar = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
         <motion.a
           href="#home"
           aria-label="Home"
+          className="shrink-0"
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -91,8 +93,8 @@ const Navbar = () => {
         {/* Desktop Glass Menu */}
         <div
           className="
-            glass-surface hidden md:flex items-center gap-8
-            px-8 py-3 rounded-full
+            glass-surface hidden lg:flex items-center justify-center gap-1
+            rounded-full px-4 py-2.5
             text-sm font-medium text-stone-900
             dark:text-white
           "
@@ -105,7 +107,7 @@ const Navbar = () => {
                 key={link.id}
                 href={`#${link.id}`}
                 onClick={() => setActiveSection(link.id)}
-                className={`relative rounded-full px-4 py-1.5 transition ${
+                className={`relative whitespace-nowrap rounded-full px-3 py-1.5 transition xl:px-4 ${
                   isActive
                     ? "text-stone-900 dark:text-white"
                     : "text-stone-700 hover:text-stone-900 dark:text-white/80 dark:hover:text-white"
@@ -126,7 +128,7 @@ const Navbar = () => {
           })}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex shrink-0 items-center gap-3">
           <motion.button
             type="button"
             onClick={toggleTheme}
@@ -139,11 +141,12 @@ const Navbar = () => {
           </motion.button>
 
           {/* Socials */}
-          <div className="flex items-center gap-4 text-lg text-stone-800 dark:text-white/90">
+          <div className="flex items-center gap-3 text-lg text-stone-800 dark:text-white/90 xl:gap-4">
             <motion.a
               href="https://www.linkedin.com/in/vinaykumar2004/"
               target="_blank"
               rel="noreferrer"
+              aria-label="LinkedIn"
               className="transition hover:text-stone-950 dark:hover:text-white"
               whileHover={{ y: -2, scale: 1.08 }}
               whileTap={{ scale: 0.94 }}
@@ -154,6 +157,7 @@ const Navbar = () => {
               href="https://github.com/codes4vinay"
               target="_blank"
               rel="noreferrer"
+              aria-label="GitHub"
               className="transition hover:text-stone-950 dark:hover:text-white"
               whileHover={{ y: -2, scale: 1.08 }}
               whileTap={{ scale: 0.94 }}
@@ -161,9 +165,21 @@ const Navbar = () => {
               <FaGithub />
             </motion.a>
             <motion.a
+              href="https://leetcode.com/u/vinayislive/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LeetCode"
+              className="transition hover:text-stone-950 dark:hover:text-white"
+              whileHover={{ y: -2, scale: 1.08 }}
+              whileTap={{ scale: 0.94 }}
+            >
+              <SiLeetcode />
+            </motion.a>
+            <motion.a
               href="https://www.instagram.com/vinay.kumar.ig/"
               target="_blank"
               rel="noreferrer"
+              aria-label="Instagram"
               className="transition hover:text-stone-950 dark:hover:text-white"
               whileHover={{ y: -2, scale: 1.08 }}
               whileTap={{ scale: 0.94 }}
@@ -174,6 +190,7 @@ const Navbar = () => {
               href="https://x.com/VinayKumar8269"
               target="_blank"
               rel="noreferrer"
+              aria-label="Twitter"
               className="transition hover:text-stone-950 dark:hover:text-white"
               whileHover={{ y: -2, scale: 1.08 }}
               whileTap={{ scale: 0.94 }}
@@ -184,6 +201,7 @@ const Navbar = () => {
               href="https://hashnode.com/@vinayislive"
               target="_blank"
               rel="noreferrer"
+              aria-label="Hashnode"
               className="transition hover:text-stone-950 dark:hover:text-white"
               whileHover={{ y: -2, scale: 1.08 }}
               whileTap={{ scale: 0.94 }}
@@ -193,7 +211,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:hidden">
+        <div className="flex items-center gap-3 lg:hidden">
           <motion.button
             type="button"
             onClick={toggleTheme}
@@ -221,7 +239,7 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
         <motion.div
-          className="px-4 pb-6 sm:px-6 lg:px-8 md:hidden"
+          className="px-4 pb-6 sm:px-6 lg:hidden lg:px-8"
           initial={{ opacity: 0, y: -8, height: 0 }}
           animate={{ opacity: 1, y: 0, height: "auto" }}
           exit={{ opacity: 0, y: -8, height: 0 }}
@@ -275,6 +293,7 @@ const Navbar = () => {
                 href="https://www.linkedin.com/in/vinaykumar2004/"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="LinkedIn"
                 className="transition hover:text-stone-950 dark:hover:text-white"
               >
                 <FaLinkedin />
@@ -283,14 +302,25 @@ const Navbar = () => {
                 href="https://github.com/codes4vinay"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="GitHub"
                 className="transition hover:text-stone-950 dark:hover:text-white"
               >
                 <FaGithub />
               </a>
               <a
+                href="https://leetcode.com/u/vinayislive/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LeetCode"
+                className="transition hover:text-stone-950 dark:hover:text-white"
+              >
+                <SiLeetcode />
+              </a>
+              <a
                 href="https://www.instagram.com/vinay.kumar.ig/"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Instagram"
                 className="transition hover:text-stone-950 dark:hover:text-white"
               >
                 <FaInstagram />
@@ -299,14 +329,16 @@ const Navbar = () => {
                 href="https://x.com/VinayKumar8269"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Twitter"
                 className="transition hover:text-stone-950 dark:hover:text-white"
               >
                 <FaTwitter />
               </a>
               <a
-                href="https://hashnode.com/@codes4vinay"
+                href="https://hashnode.com/@vinayislive"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Hashnode"
                 className="transition hover:text-stone-950 dark:hover:text-white"
               >
                 <SiHashnode />
