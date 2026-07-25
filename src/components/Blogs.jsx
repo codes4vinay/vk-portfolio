@@ -1,52 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { HASHNODE_USERNAME } from "../constants";
 
-const HASHNODE_GQL_URL = "https://gql.hashnode.com/";
+const POSTS_URL = "/hashnode-posts.json";
 
-const fetchHashnodePosts = async ({ host, limit, signal }) => {
-  const query = `
-    query PublicationPosts($host: String!, $first: Int!) {
-      publication(host: $host) {
-        posts(first: $first) {
-          edges {
-            node {
-              title
-              brief
-              url
-              publishedAt
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const res = await fetch(HASHNODE_GQL_URL, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      query,
-      variables: { host, first: limit },
-    }),
-    signal,
-  });
-
+const fetchHashnodePosts = async ({ limit, signal }) => {
+  const res = await fetch(POSTS_URL, { signal });
   if (!res.ok) {
-    throw new Error("Failed to fetch Hashnode posts.");
+    throw new Error("Failed to load Hashnode posts.");
   }
 
   const data = await res.json();
-  const edges = data?.data?.publication?.posts?.edges ?? [];
+  const posts = Array.isArray(data?.posts) ? data.posts : [];
 
-  return edges
-    .map((edge) => edge?.node)
-    .filter(Boolean)
+  return posts
+    .slice(0, limit)
     .map((node) => ({
       title: node.title,
-      link: node.url,
-      excerpt: (node.brief ?? "").trim().slice(0, 150),
+      link: node.link,
+      excerpt: (node.excerpt ?? "").trim().slice(0, 150),
       date: node.publishedAt ? new Date(node.publishedAt) : null,
     }));
 };
@@ -56,11 +29,6 @@ const Blogs = ({ limit = 4 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const host = useMemo(() => {
-    if (!HASHNODE_USERNAME) return "";
-    return `${HASHNODE_USERNAME}.hashnode.dev`;
-  }, []);
-
   useEffect(() => {
     const controller = new AbortController();
 
@@ -69,15 +37,11 @@ const Blogs = ({ limit = 4 }) => {
         setLoading(true);
         setError("");
 
-        if (!host) {
+        if (!HASHNODE_USERNAME) {
           throw new Error("Hashnode username is missing.");
         }
 
-        const parsed = await fetchHashnodePosts({
-          host,
-          limit,
-          signal: controller.signal,
-        });
+        const parsed = await fetchHashnodePosts({ limit, signal: controller.signal });
         setPosts(parsed);
       } catch (e) {
         if (controller.signal.aborted) return;
@@ -91,7 +55,7 @@ const Blogs = ({ limit = 4 }) => {
     return () => {
       controller.abort();
     };
-  }, [host, limit]);
+  }, [limit]);
 
   return (
     <section id="blogs" className="scroll-mt-28 pb-24">

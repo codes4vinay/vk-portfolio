@@ -37,11 +37,11 @@ const About = () => {
           {[
             {
               title: "Backend",
-              value: "Node.js • Express • MongoDB • SQL",
+              value: "Node.js • Express • MongoDB • SQL • Python",
             },
             {
               title: "GenAI / RAG",
-              value: "LangChain • LangGraph • Pinecone • Neo4j",
+              value: "LangChain • LangGraph • Pinecone • RAG",
             },
             {
               title: "DevOps",

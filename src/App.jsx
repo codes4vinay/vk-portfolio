@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import "./index.css";
 import Background from "./components/Background";
 import Hero from "./components/Hero";
+import LeetCodeHeatmap from "./components/LeetCodeHeatmap";
 import About from "./components/About";
 import Technologies from "./components/Technologies";
 import Experience from "./components/Experience";
@@ -24,6 +25,7 @@ function App() {
         transition={{ duration: 0.65, ease: "easeOut" }}
       >
         <Hero />
+        <LeetCodeHeatmap />
         <About />
         <Technologies />
         <Experience />

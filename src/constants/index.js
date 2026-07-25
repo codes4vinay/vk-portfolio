@@ -5,7 +5,7 @@ export const HERO_HIGHLIGHTS = [
 ];
 
 // About section about you
-export const ABOUT_TEXT = `I’m Vinay Kumar, a full stack developer with a strong interest in GenAI and cloud-native engineering. I build secure APIs, design scalable data models, and ship production-ready services with Docker and CI/CD. Lately I’ve been exploring RAG systems using vector databases and knowledge graphs (Pinecone + Neo4j), and agent workflows using LangChain/LangGraph with LangSmith for evaluation and observability.`;
+export const ABOUT_TEXT = `I’m Vinay Kumar, a full stack developer with a strong interest in GenAI and cloud-native engineering. I build secure APIs, design scalable data models, and ship production-ready services with Docker and CI/CD. Lately I’ve been exploring RAG systems using vector databases (Pinecone), and agent workflows using LangChain/LangGraph.`;
 
 export const HASHNODE_USERNAME = "vinayislive";
 

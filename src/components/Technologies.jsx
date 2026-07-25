@@ -26,6 +26,8 @@ import {
   SiRender,
   SiNginx,
   SiZod,
+  SiFastapi,
+  SiRedis,
 } from "react-icons/si";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
@@ -60,24 +62,20 @@ const Technologies = () => {
       icon: <FaDatabase className="text-4xl text-sky-700 dark:text-sky-200" />,
     },
     {
-      name: "Neo4j",
-      icon: <FaProjectDiagram className="text-4xl text-emerald-700 dark:text-emerald-200" />,
-    },
-    {
       name: "Pinecone",
       icon: <FaDatabase className="text-4xl text-violet-700 dark:text-violet-200" />,
+    },
+    {
+      name: "Redis",
+      icon: <SiRedis className="text-4xl text-red-700 dark:text-red-200" />,
     },
     {
       name: "LangChain",
       icon: <FaBrain className="text-4xl text-amber-700 dark:text-amber-200" />,
     },
     {
-      name: "LangGraph",
-      icon: <FaProjectDiagram className="text-4xl text-indigo-700 dark:text-indigo-200" />,
-    },
-    {
-      name: "LangSmith",
-      icon: <FaBrain className="text-4xl text-rose-700 dark:text-rose-200" />,
+      name: "FastAPI",
+      icon: <SiFastapi className="text-4xl text-indigo-700 dark:text-indigo-200" />,
     },
 
     // Languages & Tools

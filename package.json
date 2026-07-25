@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "sync:blogs": "node scripts/sync-hashnode-posts.mjs",
+    "prebuild": "npm run sync:blogs",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
