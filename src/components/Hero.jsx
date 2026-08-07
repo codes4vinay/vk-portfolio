@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { HERO_CONTENT, HERO_HIGHLIGHTS } from "../constants";
+import { HERO_CONTENT } from "../constants";
 import { motion } from "framer-motion";
+import { FaFileDownload, FaExternalLinkAlt, FaRocket, FaGithub, FaTerminal } from "react-icons/fa";
+import { HiSparkles } from "react-icons/hi2";
 
 const containerVariants = {
-  hidden: { opacity: 0, x: -80 },
+  hidden: { opacity: 0, x: -50 },
   visible: {
     opacity: 1,
     x: 0,
     transition: {
       duration: 0.6,
-      staggerChildren: 0.25,
-      ease: "easeOut",
+      staggerChildren: 0.18,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -20,7 +22,7 @@ const childVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: { duration: 0.45, ease: "easeOut" },
   },
 };
 
@@ -192,146 +194,154 @@ const Hero = () => {
   const calendarWidth = weeks.length * CELL_SIZE + (weeks.length - 1) * CELL_GAP;
 
   return (
-    <section id="home" className="mt-6 scroll-mt-28 pb-16 lg:pb-28">
-      <div className="flex flex-col-reverse lg:flex-row items-center gap-10">
+    <section id="home" className="relative mt-8 scroll-mt-28 pb-16 lg:pb-28">
+      <div className="flex flex-col lg:flex-row items-center gap-12">
         {/* LEFT CONTENT */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left px-4"
+          className="w-full lg:w-1/2 flex flex-col items-start text-left px-2 sm:px-4"
         >
+          {/* Status Badge */}
+          <motion.div variants={childVariants} className="mb-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              <HiSparkles className="text-amber-400" />
+              <span>Full Stack & GenAI Engineer</span>
+            </div>
+          </motion.div>
+
           {/* NAME */}
           <motion.h1
             variants={childVariants}
-            className="
-              bg-gradient-to-r from-slate-950 via-violet-700 to-fuchsia-600
-              dark:from-stone-100 dark:via-stone-300 dark:to-fuchsia-300
-              bg-clip-text text-transparent
-              text-4xl sm:text-5xl lg:text-7xl
-              font-bold tracking-tight
-            "
+            className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight"
           >
-            Vinay Kumar
+            <span className="bg-gradient-to-r from-slate-900 via-violet-700 to-indigo-600 bg-clip-text text-transparent dark:from-white dark:via-violet-200 dark:to-cyan-300">
+              Vinay Kumar
+            </span>
           </motion.h1>
 
           {/* ROLE */}
-          <motion.span
-            variants={childVariants}
-            className="
-  mt-3 inline-block
-  bg-gradient-to-r from-slate-700 via-violet-700 to-fuchsia-600
-  dark:from-stone-300 dark:via-stone-300 dark:to-stone-400
-  bg-clip-text text-transparent
-  text-lg sm:text-xl lg:text-2xl
-  tracking-wide
-"
-          >
-            Full Stack Developer • DevOps • GenAI
-          </motion.span>
-
-          {/* ACCENT LINE */}
           <motion.div
             variants={childVariants}
-            className="
-              mt-4 h-px w-24
-              bg-gradient-to-r from-violet-500 to-transparent dark:from-stone-300
-            "
-          />
+            className="mt-3 flex flex-wrap items-center justify-start gap-2 text-sm sm:text-lg font-semibold text-slate-700 dark:text-slate-300"
+          >
+            <span className="rounded-lg bg-violet-500/10 px-2.5 py-1 text-violet-600 dark:bg-violet-400/10 dark:text-violet-300">
+              Full Stack
+            </span>
+            <span className="text-slate-400">•</span>
+            <span className="rounded-lg bg-cyan-500/10 px-2.5 py-1 text-cyan-600 dark:bg-cyan-400/10 dark:text-cyan-300">
+              DevOps
+            </span>
+            <span className="text-slate-400">•</span>
+            <span className="rounded-lg bg-fuchsia-500/10 px-2.5 py-1 text-fuchsia-600 dark:bg-fuchsia-400/10 dark:text-fuchsia-300">
+              GenAI / RAG
+            </span>
+          </motion.div>
+
 
           {/* DESCRIPTION */}
           <motion.p
             variants={childVariants}
-            className="
-              mt-6 max-w-xl
-              text-base sm:text-lg lg:text-xl
-              leading-relaxed
-              text-stone-700 dark:text-stone-300
-            "
+            className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 font-medium"
           >
             {HERO_CONTENT}
           </motion.p>
 
-          <motion.ul
-            variants={childVariants}
-            className="mt-6 grid max-w-xl gap-2 text-sm text-stone-700 dark:text-stone-300 sm:text-base"
-          >
-            {HERO_HIGHLIGHTS.map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-stone-500" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </motion.ul>
-
           {/* CTA BUTTONS */}
+
           <motion.div
             variants={childVariants}
-            className="mt-8 flex flex-col sm:flex-row gap-4"
+            className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
+            {/* Download Resume */}
+            <a
+              href="/Vinay_Kumar_resume.pdf"
+              download
+              className="
+                group relative inline-flex items-center justify-center gap-2.5 w-full sm:w-auto
+                rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-7 py-3.5
+                text-sm font-bold text-white shadow-xl shadow-violet-600/30
+                transition-all duration-300 hover:scale-[1.03] hover:shadow-violet-600/50
+              "
+            >
+              <FaFileDownload className="transition-transform duration-300 group-hover:-translate-y-0.5" />
+              <span>Download Resume</span>
+            </a>
+
             {/* Preview Resume */}
             <a
               href="/Vinay_Kumar_resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="
-      rounded-full border border-slate-900/15 bg-white/60
-      px-6 py-3 text-sm font-medium
-      text-slate-900 backdrop-blur-md
-      hover:bg-white transition
-      dark:border-stone-300 dark:bg-transparent dark:text-stone-200 dark:hover:bg-stone-800
-    "
+                group inline-flex items-center justify-center gap-2 w-full sm:w-auto
+                rounded-2xl border border-slate-900/15 bg-white/70 px-7 py-3.5
+                text-sm font-bold text-slate-800 backdrop-blur-md transition-all duration-300
+                hover:border-violet-500/50 hover:bg-white hover:shadow-lg dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-violet-400/50 dark:hover:bg-slate-900
+              "
             >
-              Preview Resume
-            </a>
-
-            {/* Download Resume */}
-            <a
-              href="/Vinay_Kumar_resume.pdf"
-              download
-              className="
-      rounded-full bg-slate-950
-      px-6 py-3 text-sm font-medium
-      text-white
-      shadow hover:bg-violet-700 transition
-      dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200
-    "
-            >
-              Download Resume
+              <FaExternalLinkAlt className="text-xs text-violet-500" />
+              <span>Preview Resume</span>
             </a>
           </motion.div>
         </motion.div>
 
-        {/* RIGHT CONTENT */}
+        {/* RIGHT CONTENT - GITHUB CONTRIBUTIONS DASHBOARD */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="w-full lg:w-1/2 flex justify-center px-4"
+          transition={{ duration: 0.75, delay: 0.3 }}
+          className="w-full lg:w-1/2 flex justify-center px-2 sm:px-4"
         >
-          <div className="relative w-full">
-            {/* BACKDROP */}
-            <div
-              className="
-                absolute -inset-4 rounded-xl
-                bg-gradient-to-r from-stone-800/40 to-stone-700/20
-                blur-xl
-              "
-            />
+          <div className="relative w-full max-w-[780px]">
+            {/* Glowing Backdrop */}
+            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-violet-600/30 via-cyan-500/20 to-fuchsia-600/30 blur-2xl dark:opacity-70 opacity-30" />
 
-            {/* GITHUB CONTRIBUTIONS GRAPH */}
-            <div className="relative mx-auto w-full max-w-[780px] overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/20 dark:border-[#30363d] dark:bg-[#0d1117] dark:shadow-black/40 sm:p-6">
-              <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            {/* GITHUB TERMINAL CARD */}
+            <div className="relative overflow-hidden rounded-3xl border border-slate-900/10 bg-white/80 p-5 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80 sm:p-6">
+              {/* Terminal Title Bar */}
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-900/10 pb-4 dark:border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-3 w-3 rounded-full bg-rose-500/80" />
+                    <span className="h-3 w-3 rounded-full bg-amber-500/80" />
+                    <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+                  </div>
+                  <span className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 font-code">
+                    <FaTerminal className="text-violet-500" />
+                    github-contributions.sh
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <FaGithub className="text-lg text-slate-800 dark:text-slate-200" />
+                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                    @{GITHUB_USERNAME}
+                  </span>
+                </div>
+              </div>
+
+              {/* Summary Header */}
+              <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-lg font-medium text-slate-950 dark:text-[#f0f6fc] sm:text-xl">
-                    {selectedYearTotal} contributions in {selectedYear}
-                  </h2>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-[#8b949e]">
-                    GitHub contributions for @{GITHUB_USERNAME}
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white font-code">
+                    {selectedYearTotal}{" "}
+                    <span className="text-violet-600 dark:text-cyan-400 text-sm font-normal">
+                      contributions in {selectedYear}
+                    </span>
+                  </h3>
+                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    Verified GitHub commits & activity
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
+                {/* Year Selectors */}
+                <div className="flex items-center gap-1.5">
                   {availableYears.map((year) => {
                     const isActive = selectedYear === year;
 
@@ -341,15 +351,13 @@ const Hero = () => {
                         type="button"
                         onClick={(event) => {
                           event.preventDefault();
-                          event.stopPropagation();
                           setSelectedYear(year);
                         }}
-                        className={`rounded-md border px-3 py-1.5 text-xs font-medium transition sm:text-sm ${
+                        className={`rounded-xl border px-3 py-1 text-xs font-bold font-code transition-all ${
                           isActive
-                            ? "border-green-600 bg-green-600/10 text-slate-950 dark:border-[#2ea043] dark:bg-[#1f6feb]/10 dark:text-[#f0f6fc]"
-                            : "border-slate-300 bg-slate-100 text-slate-500 hover:border-slate-400 hover:text-slate-700 dark:border-[#30363d] dark:bg-[#161b22] dark:text-[#8b949e] dark:hover:border-[#3d444d] dark:hover:text-[#c9d1d9]"
+                            ? "border-violet-500 bg-violet-600 text-white shadow-md shadow-violet-600/30 dark:border-cyan-400 dark:bg-cyan-500/20 dark:text-cyan-300"
+                            : "border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800"
                         }`}
-                        aria-pressed={isActive}
                       >
                         {year}
                       </button>
@@ -358,28 +366,16 @@ const Hero = () => {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-[#30363d] dark:bg-[#0d1117] sm:p-6">
-                <div className="mb-3 flex items-center justify-between text-xs text-slate-500 dark:text-[#8b949e]">
-                  <a
-                    href={`https://github.com/${GITHUB_USERNAME}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="transition hover:text-slate-900 dark:hover:text-[#c9d1d9]"
-                  >
-                    View profile
-                  </a>
-                  <span>Contribution settings</span>
-                </div>
-
-                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-[#21262d] dark:bg-[#0b0f14] sm:p-5">
-                  <div className="min-w-[680px] sm:min-w-[720px]">
-                    <div className="mb-3 grid grid-cols-[40px_1fr] gap-3">
+              {/* Grid Box */}
+              <div className="rounded-2xl border border-slate-900/10 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-slate-900/80">
+                <div className="overflow-x-auto">
+                  <div className="min-w-[620px]">
+                    {/* Months row */}
+                    <div className="mb-2.5 grid grid-cols-[36px_1fr] gap-2">
                       <div />
                       <div
-                        className="relative h-5 text-xs text-slate-500 dark:text-[#8b949e]"
-                        style={{
-                          width: `${calendarWidth}px`,
-                        }}
+                        className="relative h-4 text-[11px] font-medium text-slate-500 dark:text-slate-400 font-code"
+                        style={{ width: `${calendarWidth}px` }}
                       >
                         {monthLabels.map((month) => (
                           <span
@@ -395,9 +391,10 @@ const Hero = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-[40px_1fr] gap-3">
+                    {/* Days & Tiles */}
+                    <div className="grid grid-cols-[36px_1fr] gap-2">
                       <div
-                        className="grid pt-[1px] text-[10px] text-slate-500 dark:text-[#8b949e]"
+                        className="grid text-[10px] font-semibold text-slate-500 dark:text-slate-400 font-code"
                         style={{
                           gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
                           rowGap: `${CELL_GAP}px`,
@@ -443,7 +440,7 @@ const Hero = () => {
                                 <span
                                   key={day.date}
                                   title={`${day.count} contributions on ${day.date}`}
-                                  className="rounded-[2px] border border-black/10"
+                                  className="rounded-[3px] transition-transform hover:scale-125"
                                   style={{
                                     backgroundColor,
                                     width: `${CELL_SIZE}px`,
@@ -459,43 +456,45 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3 text-xs text-slate-500 dark:text-[#8b949e] sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-4 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-code">
                   <a
-                    href="https://docs.github.com/en/account-and-profile/concepts/contributions-on-your-profile"
+                    href={`https://github.com/${GITHUB_USERNAME}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="transition hover:text-slate-900 dark:hover:text-[#c9d1d9]"
+                    className="inline-flex items-center gap-1 hover:text-violet-600 dark:hover:text-cyan-400 transition"
                   >
+                    <span>view profile</span>
+                    <FaExternalLinkAlt className="text-[10px]" />
                   </a>
-                  <div className="flex items-center gap-2 self-end sm:self-auto">
-                    <span>Less</span>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px]">Less</span>
                     <div className="flex items-center gap-1">
                       {CONTRIBUTION_COLORS.map((color) => (
                         <span
                           key={color}
-                          className="h-3.5 w-3.5 rounded-sm"
+                          className="h-3 w-3 rounded-xs"
                           style={{ backgroundColor: color }}
                         />
                       ))}
                     </div>
-                    <span>More</span>
+                    <span className="text-[10px]">More</span>
                   </div>
                 </div>
 
                 {loadingContributions && (
-                  <p className="mt-4 text-xs text-slate-500 dark:text-[#8b949e]">
-                    Loading contribution activity...
+                  <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 font-code animate-pulse">
+                    &gt; Fetching GitHub activity telemetry...
                   </p>
                 )}
 
                 {contributionError && (
-                  <p className="mt-4 text-xs text-rose-400">
-                    {contributionError}
+                  <p className="mt-3 text-xs text-rose-500 font-code">
+                    ! {contributionError}
                   </p>
                 )}
               </div>
             </div>
-
           </div>
         </motion.div>
       </div>
@@ -504,3 +503,4 @@ const Hero = () => {
 };
 
 export default Hero;
+

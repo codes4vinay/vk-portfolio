@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RiReactjsLine, RiTailwindCssFill } from "react-icons/ri";
 import { TbBrandMongodb, TbBrandGithub } from "react-icons/tb";
 import {
@@ -12,10 +12,10 @@ import {
   FaAws,
   FaDatabase,
   FaBrain,
-  FaProjectDiagram,
 } from "react-icons/fa";
 import {
   SiJavascript,
+  SiTypescript,
   SiExpress,
   SiPython,
   SiVite,
@@ -29,174 +29,240 @@ import {
   SiFastapi,
   SiRedis,
 } from "react-icons/si";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 
 const Technologies = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = ["All", "Languages", "Backend & APIs", "GenAI & Data", "Frontend", "DevOps & Cloud"];
+
   const techStack = [
-    // Frontend
-    {
-      name: "React",
-      icon: <RiReactjsLine className="text-4xl text-cyan-700 dark:text-cyan-300" />,
-    },
-    {
-      name: "TailwindCSS",
-      icon: <RiTailwindCssFill className="text-4xl text-sky-700 dark:text-sky-300" />,
-    },
-
-    // Backend
-    {
-      name: "Node.js",
-      icon: <FaNodeJs className="text-4xl text-emerald-700 dark:text-emerald-300" />,
-    },
-    {
-      name: "Express.js",
-      icon: <SiExpress className="text-4xl text-slate-700 dark:text-stone-200" />,
-    },
-    {
-      name: "MongoDB",
-      icon: <TbBrandMongodb className="text-4xl text-emerald-700 dark:text-emerald-300" />,
-    },
-    {
-      name: "SQL",
-      icon: <FaDatabase className="text-4xl text-sky-700 dark:text-sky-200" />,
-    },
-    {
-      name: "Pinecone",
-      icon: <FaDatabase className="text-4xl text-violet-700 dark:text-violet-200" />,
-    },
-    {
-      name: "Redis",
-      icon: <SiRedis className="text-4xl text-red-700 dark:text-red-200" />,
-    },
-    {
-      name: "LangChain",
-      icon: <FaBrain className="text-4xl text-amber-700 dark:text-amber-200" />,
-    },
-    {
-      name: "FastAPI",
-      icon: <SiFastapi className="text-4xl text-indigo-700 dark:text-indigo-200" />,
-    },
-
-    // Languages & Tools
+    // Programming Languages
     {
       name: "JavaScript",
-      icon: <SiJavascript className="text-4xl text-yellow-600 dark:text-yellow-200" />,
+      category: "Languages",
+      icon: <SiJavascript className="text-3xl text-yellow-400" />,
+    },
+    {
+      name: "TypeScript",
+      category: "Languages",
+      icon: <SiTypescript className="text-3xl text-blue-500" />,
     },
     {
       name: "Python",
-      icon: <SiPython className="text-4xl text-sky-700 dark:text-sky-200" />,
+      category: "Languages",
+      icon: <SiPython className="text-3xl text-blue-400" />,
     },
     {
       name: "Java",
-      icon: <FaJava className="text-4xl text-rose-700 dark:text-rose-200" />,
+      category: "Languages",
+      icon: <FaJava className="text-3xl text-red-500" />,
+    },
+
+    // Backend & APIs
+    {
+      name: "Node.js",
+      category: "Backend & APIs",
+      icon: <FaNodeJs className="text-3xl text-emerald-500" />,
     },
     {
-      name: "HTML5",
-      icon: <FaHtml5 className="text-4xl text-orange-700 dark:text-orange-200" />,
+      name: "Express.js",
+      category: "Backend & APIs",
+      icon: <SiExpress className="text-3xl text-slate-700 dark:text-slate-200" />,
     },
     {
-      name: "CSS3",
-      icon: <FaCss3Alt className="text-4xl text-blue-700 dark:text-blue-200" />,
+      name: "FastAPI",
+      category: "Backend & APIs",
+      icon: <SiFastapi className="text-3xl text-teal-500" />,
     },
     {
-      name: "Vite",
-      icon: <SiVite className="text-4xl text-violet-700 dark:text-violet-200" />,
-    },
-    {
-      name: "NPM",
-      icon: <SiNpm className="text-4xl text-red-700 dark:text-red-200" />,
-    },
-    {
-      name: "Git",
-      icon: <FaGitAlt className="text-4xl text-orange-700 dark:text-orange-200" />,
+      name: "Zod",
+      category: "Backend & APIs",
+      icon: <SiZod className="text-3xl text-indigo-500" />,
     },
     {
       name: "Postman",
-      icon: <SiPostman className="text-4xl text-orange-700 dark:text-orange-200" />,
+      category: "Backend & APIs",
+      icon: <SiPostman className="text-3xl text-orange-500" />,
+    },
+
+    // GenAI & Data
+    {
+      name: "LangChain",
+      category: "GenAI & Data",
+      icon: <FaBrain className="text-3xl text-amber-500" />,
+    },
+    {
+      name: "MongoDB",
+      category: "GenAI & Data",
+      icon: <TbBrandMongodb className="text-3xl text-emerald-500" />,
+    },
+    {
+      name: "Pinecone",
+      category: "GenAI & Data",
+      icon: <FaDatabase className="text-3xl text-violet-500" />,
+    },
+    {
+      name: "Redis",
+      category: "GenAI & Data",
+      icon: <SiRedis className="text-3xl text-rose-500" />,
+    },
+    {
+      name: "SQL",
+      category: "GenAI & Data",
+      icon: <FaDatabase className="text-3xl text-sky-500" />,
+    },
+
+    // Frontend
+    {
+      name: "React",
+      category: "Frontend",
+      icon: <RiReactjsLine className="text-3xl text-cyan-400" />,
+    },
+    {
+      name: "TailwindCSS",
+      category: "Frontend",
+      icon: <RiTailwindCssFill className="text-3xl text-sky-400" />,
+    },
+    {
+      name: "Vite",
+      category: "Frontend",
+      icon: <SiVite className="text-3xl text-purple-400" />,
+    },
+    {
+      name: "HTML5",
+      category: "Frontend",
+      icon: <FaHtml5 className="text-3xl text-orange-600" />,
+    },
+    {
+      name: "CSS3",
+      category: "Frontend",
+      icon: <FaCss3Alt className="text-3xl text-blue-600" />,
     },
 
     // DevOps & Cloud
     {
       name: "Docker",
-      icon: <FaDocker className="text-4xl text-sky-700 dark:text-sky-200" />,
-    },
-    {
-      name: "Linux",
-      icon: <FaLinux className="text-4xl text-slate-700 dark:text-stone-200" />,
+      category: "DevOps & Cloud",
+      icon: <FaDocker className="text-3xl text-sky-500" />,
     },
     {
       name: "AWS",
-      icon: <FaAws className="text-4xl text-amber-700 dark:text-amber-200" />,
+      category: "DevOps & Cloud",
+      icon: <FaAws className="text-3xl text-amber-500" />,
     },
     {
-      name: "GitHub",
-      icon: <TbBrandGithub className="text-4xl text-slate-800 dark:text-stone-100" />,
+      name: "Linux",
+      category: "DevOps & Cloud",
+      icon: <FaLinux className="text-3xl text-slate-800 dark:text-slate-200" />,
     },
     {
       name: "GitHub Actions",
-      icon: <SiGithubactions className="text-4xl text-blue-700 dark:text-blue-200" />,
+      category: "DevOps & Cloud",
+      icon: <SiGithubactions className="text-3xl text-blue-500" />,
     },
     {
-      name: "Zod",
-      icon: <SiZod className="text-4xl text-indigo-700 dark:text-indigo-200" />,
-    },
-    {
-      name: "Cloudflare",
-      icon: <SiCloudflare className="text-4xl text-orange-700 dark:text-orange-200" />,
-    },
-    {
-      name: "Render",
-      icon: <SiRender className="text-4xl text-indigo-700 dark:text-indigo-200" />,
+      name: "Git",
+      category: "DevOps & Cloud",
+      icon: <FaGitAlt className="text-3xl text-orange-500" />,
     },
     {
       name: "Nginx",
-      icon: <SiNginx className="text-4xl text-emerald-700 dark:text-emerald-200" />,
+      category: "DevOps & Cloud",
+      icon: <SiNginx className="text-3xl text-emerald-600" />,
+    },
+    {
+      name: "Cloudflare",
+      category: "DevOps & Cloud",
+      icon: <SiCloudflare className="text-3xl text-orange-500" />,
+    },
+    {
+      name: "Render",
+      category: "DevOps & Cloud",
+      icon: <SiRender className="text-3xl text-purple-500" />,
     },
   ];
 
+
+  const filteredTech =
+    activeCategory === "All"
+      ? techStack
+      : techStack.filter((item) => item.category === activeCategory);
+
   return (
-    <section id="technologies" className="scroll-mt-28 pb-24">
+    <section id="technologies" className="relative scroll-mt-28 pb-24">
       <SectionHeading
-        eyebrow="TOOLBOX"
-        title="Tech stack I use to build"
-        subtitle="Backend, GenAI/RAG, and DevOps tools I use most."
+        eyebrow="TECHNICAL TOOLBOX"
+        title="Technologies & Frameworks"
+        subtitle="Tools, languages, databases, and platforms I use to build scalable products."
       />
 
       <div className="mx-auto max-w-5xl">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
-          {techStack.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: index * 0.02, ease: "easeOut" }}
-              whileHover={{
-                y: -5,
-                transition: { type: "spring", stiffness: 360, damping: 24 },
-              }}
-              whileTap={{ scale: 0.98 }}
-              className="group relative overflow-hidden rounded-2xl border border-slate-900/10 bg-white/70 p-4 backdrop-blur-md transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-            >
-              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="absolute -inset-20 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.14),transparent_55%)]" />
-              </div>
-              <div className="relative flex flex-col items-center gap-3">
-                <div className="grid h-11 w-11 place-items-center rounded-2xl border border-slate-900/10 bg-white/70 shadow-sm shadow-slate-900/5 transition-transform duration-300 group-hover:scale-[1.03] dark:border-white/10 dark:bg-black/30 dark:shadow-none">
+        {/* Category Tabs with Animated Pill */}
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={`relative rounded-full px-4 py-2 text-xs font-bold font-code transition-colors duration-200 ${
+                  isActive
+                    ? "text-white dark:text-slate-950"
+                    : "border border-slate-900/10 bg-white/70 text-slate-700 hover:bg-slate-900/10 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-white/10"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="active-tech-category-pill"
+                    className="absolute inset-0 rounded-full bg-violet-600 shadow-lg shadow-violet-600/30 dark:bg-cyan-500 dark:shadow-cyan-500/30 z-0"
+                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10">{cat}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Tech Grid - Keyed by Category for Instant Smooth Transition */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory}
+            initial={{ opacity: 0, y: 12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
+          >
+            {filteredTech.map((tech) => (
+              <motion.div
+                key={tech.name}
+                whileHover={{ y: -5, scale: 1.03 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="group glass-surface relative flex flex-col items-center justify-center rounded-2xl border border-slate-900/10 p-5 text-center dark:border-white/10 glass-card-hover"
+              >
+                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-900/5 bg-slate-900/5 shadow-inner transition-transform duration-300 group-hover:scale-110 dark:border-white/10 dark:bg-slate-900/80">
                   {tech.icon}
                 </div>
-                <p className="text-xs font-semibold text-slate-800 dark:text-stone-200 sm:text-sm">
+                <p className="text-xs font-bold text-slate-900 dark:text-slate-200 font-code">
                   {tech.name}
                 </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                <span className="mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
+                  {tech.category}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
 };
 
 export default Technologies;
+
+
 

@@ -1,6 +1,12 @@
 {
-  "generatedAt": "2026-07-25T18:02:42.333Z",
+  "generatedAt": "2026-08-07T14:14:29.671Z",
   "posts": [
+    {
+      "title": "Understanding Backend Servers and the Complete Request Flow",
+      "link": "https://vinayislive.hashnode.dev/understanding-backend-servers-and-the-complete-request-flow",
+      "excerpt": "Understanding Backend Servers and the Complete Request Flow When we talk about how modern web applications work, most people picture buttons, screens,",
+      "publishedAt": "Sat, 25 Jul 2026 18:15:40 GMT"
+    },
     {
       "title": "Introduction to GenAI",
       "link": "https://vinayislive.hashnode.dev/introduction-to-genai",

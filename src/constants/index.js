@@ -5,36 +5,108 @@ export const HERO_HIGHLIGHTS = [
 ];
 
 // About section about you
-export const ABOUT_TEXT = `I’m Vinay Kumar, a full stack developer with a strong interest in GenAI and cloud-native engineering. I build secure APIs, design scalable data models, and ship production-ready services with Docker and CI/CD. Lately I’ve been exploring RAG systems using vector databases (Pinecone), and agent workflows using LangChain/LangGraph.`;
+export const ABOUT_TEXT = `I’m Vinay Kumar, a full stack developer with a strong interest in GenAI and cloud-native engineering. I build secure APIs, design scalable data models, and ship production-ready services with Docker and CI/CD. Lately I’ve been exploring RAG systems using vector databases (Pinecone), and agent workflows using LangChain.`;
+
 
 export const HASHNODE_USERNAME = "vinayislive";
 
 // Your work experiences
 export const EXPERIENCES = [
   {
-    year: "Oct 2025 - Dec 2025",
-    role: "Frontend Developer",
-    company: "Phi Launcher",
+    year: "Present",
+    role: "Full Stack Developer Intern",
+    company: "Sahii",
     location: "Remote",
+    link: "https://sahii.in",
+    description: [
+      "Shipped 15+ production REST APIs and server-side business logic in Node.js/Express/MongoDB, integrating frontend components with backend services for a live wholesale e-commerce platform.",
+      "Built typo-tolerant product search with Meilisearch and Fuse.js, and rewrote key MongoDB queries, cutting slow-query response time and improving search relevance for end users.",
+      "Improved Core Web Vitals and SEO by optimizing server-side rendering and asset delivery, directly supporting production deployments and resolving live incidents.",
+      "Worked across the full stack (Node.js, Express, EJS, Tailwind CSS) in a small team, owning features end-to-end from design to deployment.",
+    ],
+    technologies: [
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Meilisearch",
+      "Fuse.js",
+      "EJS",
+      "Tailwind CSS",
+      "REST APIs",
+      "SEO",
+    ],
+  },
+
+  {
+    year: "Oct 2025 - Nov 2025",
+    role: "Web Developer",
+    company: "Phi Launcher",
+    location: "Freelance | Remote",
     link: "https://philauncher.com",
     description: [
-      "Developed a responsive frontend with React.js and Tailwind CSS, delivering 8+ UI sections with reusable components following scalable architecture patterns.",
-      "Reduced initial bundle size by 67% from 1200 KB to 400 KB using route-based code splitting and lazy loading across multiple routes.",
-      "Improved Lighthouse performance score from 60 to 99 by auditing 10+ pages, optimizing render paths, and improving Core Web Vitals.",
+      "Engineered responsive, reusable UI components with React.js and Tailwind CSS to build scalable, mobile-first interfaces.",
+      "Integrated 10+ REST APIs and collaborated with backend to deliver seamless, end-to-end application functionality.",
+      "Optimized frontend performance: cut bundle size by 67% and boosted Lighthouse score from 60 to 99.",
+      "Shipped production-ready features in a fast-paced startup environment, contributing to Phi Launcher’s product growth.",
     ],
     technologies: [
       "React.js",
       "Tailwind CSS",
-      "Code Splitting",
-      "Lazy Loading",
+      "REST APIs",
+      "Performance Optimization",
       "Lighthouse",
       "Core Web Vitals",
     ],
   },
 ];
 
+
+
 // Your projects
 export const PROJECTS = [
+  {
+    title: "Chaos Proxy — HTTP Fault-Injection Proxy",
+    image: "/chaos-proxy.jpg",
+    description: [
+      "Built an HTTP fault-injection proxy from scratch on raw Node.js http streams, handling concurrent connection forwarding, piping, and error recovery without a framework.",
+      "Designed a triangle-wave fault degradation model to simulate realistic network failure patterns, with a real-time pipeline computing p50/p95/p99 latency and failure-rate metrics.",
+      "Built a threshold-based assertion engine that auto-halts fault injection on p99 latency or failure-rate breaches, configurable live via REST APIs.",
+      "Shipped a live React + Socket.IO dashboard streaming telemetry and visualizing latency/fault trends with Recharts, including a configurable load generator.",
+    ],
+    technologies: [
+      "Node.js",
+      "TypeScript",
+      "Express",
+      "React",
+      "Socket.IO",
+      "WebSockets",
+      "Recharts",
+    ],
+    github: "https://github.com/codes4vinay/Chaos-Proxy",
+  },
+  {
+    title: "Mendly — Electronics Repair Service Platform",
+    image: "/mendly.png",
+    description: [
+      "Built a full-stack repair-service marketplace connecting customers with verified providers across 3 RBAC roles, with booking management, live chat, order tracking, and reviews.",
+      "Implemented JWT access/refresh auth with httpOnly cookie sessions, Redux state, and rate limiting (100 req/15 min), plus Socket.IO for real-time messaging and Razorpay for secure payments.",
+      "Designed a scalable MVC backend with MongoDB indexing and Zod validation; deployed on Azure Web App achieving sub-150ms average API response time.",
+      "Integrated a RAG-powered support chatbot using the Groq API and Pinecone for context-aware, low-latency customer assistance.",
+    ],
+    technologies: [
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Socket.IO",
+      "Razorpay",
+      "RAG",
+      "Pinecone",
+      "Azure",
+    ],
+    github: "https://github.com/codes4vinay/mendly",
+    demo: "https://mendly.vinaydev.in/",
+  },
   {
     title: "DocFusion - AI Document Analysis Platform",
     image: "/project-5.png",
@@ -60,30 +132,6 @@ export const PROJECTS = [
     ],
     github: "https://github.com/codes4vinay/DocFusion",
     demo: "https://docfusion.vinaydev.in/",
-  },
-  {
-    title: "Mendly - Electronics Repair & Marketplace",
-    image: "/mendly.png",
-    description: [
-      "Built a full-stack MERN platform connecting customers with verified electronics repair service centres.",
-      "Implemented real-time chat with Socket.IO and secure Razorpay payment integration with HMAC verification.",
-      "Added role-based access control for users, technicians, and admins with secure JWT authentication using httpOnly cookies.",
-      "Integrated a RAG-powered AI chatbot to answer Mendly-related questions for users.",
-      "Optimized performance with MongoDB compound indexes and deployed the platform on Azure with a comprehensive admin dashboard.",
-    ],
-    technologies: [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "Socket.IO",
-      "Razorpay",
-      "Express",
-      "Redux Toolkit",
-      "TailwindCSS",
-      "Azure",
-    ],
-    github: "https://github.com/codes4vinay/mendly",
-    demo: "https://mendly.vinaydev.in/",
   },
   {
     title: "AI Thumbnail Generator",
@@ -145,3 +193,4 @@ export const PROJECTS = [
     demo: "https://filespire.in/",
   },
 ];
+

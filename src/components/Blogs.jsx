@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { HASHNODE_USERNAME } from "../constants";
+import { FaBookOpen, FaExternalLinkAlt } from "react-icons/fa";
+import { SiHashnode } from "react-icons/si";
 
 const POSTS_URL = "/hashnode-posts.json";
 
@@ -58,67 +60,72 @@ const Blogs = ({ limit = 4 }) => {
   }, [limit]);
 
   return (
-    <section id="blogs" className="scroll-mt-28 pb-24">
+    <section id="blogs" className="relative scroll-mt-28 pb-24">
       <SectionHeading
-        eyebrow="WRITING"
-        title="Latest blog posts"
-        subtitle="Notes on MERN, DevOps, and GenAI experiments."
+        eyebrow="TECHNICAL ARTICLES"
+        title="Blog Posts & Engineering Notes"
+        subtitle="Insights on full stack architecture, DevOps automation, and GenAI applications."
       />
 
       <div className="mx-auto max-w-5xl">
         {loading ? (
-          <p className="text-center text-sm text-stone-600 dark:text-stone-400">
-            Loading posts...
-          </p>
+          <div className="flex justify-center py-12">
+            <span className="text-sm font-bold font-code text-violet-500 animate-pulse">
+              &gt; Syncing latest Hashnode publications...
+            </span>
+          </div>
         ) : null}
 
         {error ? (
-          <p className="text-center text-sm text-rose-400">{error}</p>
+          <p className="text-center text-xs font-code text-rose-500">{error}</p>
         ) : null}
 
         {!loading && !error ? (
           <div className="grid gap-6 md:grid-cols-2">
-            {posts.map((post) => (
+            {posts.map((post, index) => (
               <motion.a
                 key={post.link}
                 href={post.link}
                 target="_blank"
                 rel="noreferrer"
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-                whileHover={{
-                  y: -6,
-                  transition: { type: "spring", stiffness: 340, damping: 24 },
-                }}
-                whileTap={{ scale: 0.99 }}
-                className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 p-6 backdrop-blur-md transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                transition={{ duration: 0.45, delay: index * 0.1, ease: "easeOut" }}
+                whileHover={{ y: -6 }}
+                className="group glass-surface glass-card-hover relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 border border-slate-900/10 dark:border-white/10"
               >
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <div className="absolute -inset-24 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.14),transparent_55%)]" />
-                </div>
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 px-3 py-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 font-code">
+                      <SiHashnode className="text-xs" />
+                      {post.date
+                        ? post.date.toLocaleDateString(undefined, {
+                            year: "numeric",
+                            month: "short",
+                            day: "2-digit",
+                          })
+                        : "HASHNODE"}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 font-code">
+                      Article
+                    </span>
+                  </div>
 
-                <div className="relative">
-                  <p className="text-xs font-semibold tracking-[0.18em] text-stone-500 dark:text-stone-400">
-                    {post.date
-                      ? post.date.toLocaleDateString(undefined, {
-                          year: "numeric",
-                          month: "short",
-                          day: "2-digit",
-                        })
-                      : "HASHNODE"}
-                  </p>
-                  <h3 className="mt-3 text-lg font-semibold text-stone-950 dark:text-stone-100">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-cyan-400 transition-colors">
                     {post.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 font-medium">
                     {post.excerpt}
                     {post.excerpt.length >= 150 ? "…" : ""}
                   </p>
-                  <p className="mt-5 text-sm font-medium text-stone-900 dark:text-stone-200">
-                    Read article →
-                  </p>
+                </div>
+
+                <div className="mt-6 flex items-center gap-2 text-xs font-bold text-violet-600 dark:text-cyan-400 font-code pt-4 border-t border-slate-900/10 dark:border-white/10">
+                  <FaBookOpen className="text-xs" />
+                  <span>Read Article</span>
+                  <FaExternalLinkAlt className="text-[10px] transition-transform duration-300 group-hover:translate-x-1" />
                 </div>
               </motion.a>
             ))}
@@ -130,9 +137,11 @@ const Blogs = ({ limit = 4 }) => {
             href={`https://${HASHNODE_USERNAME}.hashnode.dev/`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-5 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-black/10 dark:border-white/15 dark:bg-black/20 dark:text-stone-100 dark:hover:bg-white/10"
+            className="inline-flex items-center gap-2 rounded-2xl border border-slate-900/15 bg-white/80 px-6 py-3 text-xs font-bold text-slate-900 backdrop-blur-md transition-all hover:bg-violet-600 hover:text-white dark:border-white/15 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:bg-cyan-500 dark:hover:text-slate-950 font-code"
           >
-            View all posts
+            <SiHashnode className="text-sm" />
+            <span>Visit Hashnode Blog</span>
+            <FaExternalLinkAlt className="text-xs" />
           </a>
         </div>
       </div>
@@ -141,3 +150,4 @@ const Blogs = ({ limit = 4 }) => {
 };
 
 export default Blogs;
+
