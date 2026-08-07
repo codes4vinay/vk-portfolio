@@ -66,6 +66,19 @@ const Navbar = () => {
     });
   };
 
+  const scrollToSection = (e, id) => {
+    if (e) e.preventDefault();
+    setActiveSection(id);
+    setOpen(false);
+
+    const element = document.getElementById(id);
+    if (element) {
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
+  };
+
   const socialLinks = [
     {
       href: "https://www.linkedin.com/in/vinaykumar2004/",
@@ -108,7 +121,9 @@ const Navbar = () => {
   return (
     <motion.header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "py-2.5 glass-navbar border-b border-slate-900/10 dark:border-white/10" : "py-4 bg-transparent"
+        scrolled || open
+          ? "py-2.5 glass-navbar border-b border-slate-200/80 dark:border-white/10 shadow-sm"
+          : "py-4 max-lg:bg-white/90 max-lg:dark:bg-slate-950/90 max-lg:backdrop-blur-xl max-lg:border-b max-lg:border-slate-200/50 max-lg:dark:border-white/10 bg-transparent"
       }`}
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -118,6 +133,7 @@ const Navbar = () => {
         {/* Brand Logo */}
         <motion.a
           href="#home"
+          onClick={(e) => scrollToSection(e, "home")}
           aria-label="Home"
           className="group flex items-center gap-3"
           whileHover={{ scale: 1.02 }}
@@ -161,7 +177,7 @@ const Navbar = () => {
               <a
                 key={link.id}
                 href={`#${link.id}`}
-                onClick={() => setActiveSection(link.id)}
+                onClick={(e) => scrollToSection(e, link.id)}
                 className={`relative rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-colors duration-200 xl:px-4 ${
                   isActive
                     ? "text-white dark:text-white"
@@ -187,7 +203,7 @@ const Navbar = () => {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-slate-900/10 bg-white/70 text-slate-800 backdrop-blur-md transition hover:border-violet-500/50 hover:bg-violet-500/10 dark:border-white/10 dark:bg-slate-900/70 dark:text-white dark:hover:border-violet-400/50 dark:hover:bg-violet-400/20"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-slate-900/10 bg-white/70 text-slate-800 backdrop-blur-md transition hover:border-violet-500/50 hover:bg-violet-500/10 dark:border-white/10 dark:bg-slate-900/70 dark:text-white dark:hover:border-violet-400/50 dark:hover:bg-violet-400/20 cursor-pointer"
             whileHover={{ scale: 1.1, rotate: theme === "dark" ? -15 : 15 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -225,7 +241,7 @@ const Navbar = () => {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-900/10 bg-white/80 text-slate-800 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 text-slate-800 backdrop-blur-md shadow-xs dark:border-white/10 dark:bg-slate-900/90 dark:text-white cursor-pointer"
             whileTap={{ scale: 0.9 }}
           >
             {theme === "dark" ? <FaSun className="text-amber-300" /> : <FaMoon className="text-violet-600" />}
@@ -233,7 +249,7 @@ const Navbar = () => {
 
           <motion.button
             onClick={() => setOpen(!open)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-900/10 bg-white/80 text-slate-900 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 text-slate-900 shadow-xs dark:border-white/10 dark:bg-slate-900/90 dark:text-white cursor-pointer"
             aria-label="Menu"
             whileTap={{ scale: 0.9 }}
           >
@@ -252,7 +268,7 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -12, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="glass-surface flex flex-col gap-3 rounded-3xl p-5 shadow-2xl dark:border-white/10 dark:bg-slate-950/90">
+            <div className="flex flex-col gap-3 rounded-3xl border border-slate-200/90 bg-white/95 p-5 shadow-2xl backdrop-blur-2xl dark:border-white/15 dark:bg-slate-950/95">
               <div className="grid grid-cols-2 gap-2">
                 {navLinks.map((link) => {
                   const isActive = activeSection === link.id;
@@ -261,14 +277,11 @@ const Navbar = () => {
                     <a
                       key={link.id}
                       href={`#${link.id}`}
-                      onClick={() => {
-                        setActiveSection(link.id);
-                        setOpen(false);
-                      }}
-                      className={`rounded-2xl px-4 py-2.5 text-xs font-semibold transition ${
+                      onClick={(e) => scrollToSection(e, link.id)}
+                      className={`rounded-2xl px-4 py-3 text-xs font-bold transition ${
                         isActive
                           ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
-                          : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
+                          : "bg-slate-100 text-slate-800 hover:bg-violet-50 hover:text-violet-600 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-400"
                       }`}
                     >
                       {link.label}
@@ -277,7 +290,7 @@ const Navbar = () => {
                 })}
               </div>
 
-              <div className="mt-2 flex justify-around border-t border-slate-900/10 pt-4 text-xl dark:border-white/10">
+              <div className="mt-2 flex justify-around border-t border-slate-200/80 pt-4 text-xl dark:border-white/10 text-slate-700 dark:text-slate-300">
                 {socialLinks.map((social) => (
                   <a
                     key={social.label}

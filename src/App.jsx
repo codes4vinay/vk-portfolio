@@ -34,13 +34,13 @@ function App() {
 
       <motion.div
         className="relative z-10 mx-auto max-w-6xl px-4 pt-24 sm:px-6 lg:px-8"
-        initial={{ opacity: 0, y: 15, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{
           opacity: loading ? 0 : 1,
           y: loading ? 15 : 0,
-          filter: loading ? "blur(8px)" : "blur(0px)",
         }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        style={{ willChange: "opacity, transform" }}
       >
         <Hero />
         <LeetCodeHeatmap />

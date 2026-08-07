@@ -41,7 +41,7 @@ const Loader = ({ onComplete }) => {
     if (progress >= 100) {
       const timer = setTimeout(() => {
         if (onComplete) onComplete();
-      }, 500);
+      }, 250);
       return () => clearTimeout(timer);
     }
   }, [progress, onComplete]);
@@ -51,10 +51,11 @@ const Loader = ({ onComplete }) => {
       initial={{ opacity: 1 }}
       exit={{
         opacity: 0,
-        scale: 1.05,
-        filter: "blur(10px)",
-        transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+        scale: 0.98,
+        y: -12,
+        transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
       }}
+      style={{ willChange: "opacity, transform" }}
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#030712] px-4 font-code text-white select-none overflow-hidden"
     >
       {/* Background Neon Orbs */}

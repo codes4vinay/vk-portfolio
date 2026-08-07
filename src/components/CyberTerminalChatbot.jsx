@@ -113,15 +113,15 @@ const CyberTerminalChatbot = () => {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/40 bg-slate-950/90 text-cyan-400 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-cyan-500/20 cursor-pointer group"
+          className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-300/80 bg-white/90 text-violet-600 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-violet-500 hover:shadow-violet-500/20 dark:border-violet-500/40 dark:bg-slate-950/90 dark:text-cyan-400 dark:hover:border-cyan-400 dark:hover:shadow-cyan-500/20 cursor-pointer group"
           aria-label="Open Cyber Terminal Assistant"
         >
-          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-500 blur-md opacity-40 group-hover:opacity-90 transition-opacity" />
           {isOpen ? (
-            <FaTimes className="relative text-xl text-white" />
+            <FaTimes className="relative text-xl text-slate-800 dark:text-white" />
           ) : (
             <div className="relative flex items-center justify-center">
-              <FaTerminal className="text-xl text-cyan-400" />
+              <FaTerminal className="text-xl text-violet-600 dark:text-cyan-400" />
               <span className="absolute -top-2 -right-2 flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
@@ -139,19 +139,19 @@ const CyberTerminalChatbot = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-4 sm:right-6 z-[9999] w-[92vw] max-w-[420px] rounded-3xl border border-violet-500/30 bg-[#030712]/95 shadow-2xl backdrop-blur-2xl font-code overflow-hidden text-slate-200"
+            className="fixed bottom-24 right-4 sm:right-6 z-[9999] w-[92vw] max-w-[420px] rounded-3xl border border-slate-200/90 bg-white/95 shadow-2xl backdrop-blur-2xl font-code overflow-hidden text-slate-800 dark:border-violet-500/30 dark:bg-[#030712]/95 dark:text-slate-200"
           >
             {/* Terminal Top Window Bar */}
-            <div className="flex items-center justify-between border-b border-white/10 bg-slate-900/80 px-4 py-3 select-none">
+            <div className="flex items-center justify-between border-b border-slate-200/80 bg-slate-100/90 px-4 py-3 select-none dark:border-white/10 dark:bg-slate-900/80">
               <div className="flex items-center gap-2">
                 <div className="h-3 w-3 rounded-full bg-rose-500/80" />
                 <div className="h-3 w-3 rounded-full bg-amber-500/80" />
                 <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                <span className="ml-2 text-xs font-bold text-slate-400">vinay_ai_cli ~ bash</span>
+                <span className="ml-2 text-xs font-bold text-slate-600 dark:text-slate-400">vinay_ai_cli ~ bash</span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-white transition"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
               >
                 <FaTimes className="text-xs" />
               </button>
@@ -169,12 +169,12 @@ const CyberTerminalChatbot = () => {
                   <div
                     className={`max-w-[88%] rounded-2xl p-3 whitespace-pre-wrap ${
                       msg.sender === "user"
-                        ? "bg-violet-600/90 text-white rounded-br-xs shadow-md"
-                        : "border border-white/10 bg-slate-900/90 text-cyan-200 rounded-bl-xs shadow-inner"
+                        ? "bg-violet-600 text-white rounded-br-xs shadow-md"
+                        : "border border-slate-200/90 bg-slate-100/90 text-slate-800 rounded-bl-xs shadow-xs dark:border-white/10 dark:bg-slate-900/90 dark:text-cyan-200"
                     }`}
                   >
                     {msg.sender === "bot" && (
-                      <div className="mb-1 flex items-center gap-1.5 text-[10px] font-bold text-cyan-400">
+                      <div className="mb-1 flex items-center gap-1.5 text-[10px] font-bold text-violet-600 dark:text-cyan-400">
                         <FaRobot /> <span>AI_TERMINAL</span>
                       </div>
                     )}
@@ -184,8 +184,8 @@ const CyberTerminalChatbot = () => {
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono">
-                  <span className="h-2 w-2 animate-ping rounded-full bg-cyan-400" />
+                <div className="flex items-center gap-2 text-violet-600 dark:text-cyan-400 text-xs font-mono">
+                  <span className="h-2 w-2 animate-ping rounded-full bg-violet-600 dark:bg-cyan-400" />
                   <span>Processing query...</span>
                 </div>
               )}
@@ -193,12 +193,12 @@ const CyberTerminalChatbot = () => {
             </div>
 
             {/* Quick Suggestion Chips */}
-            <div className="flex gap-1.5 overflow-x-auto px-4 py-2 border-t border-white/5 bg-slate-950/60 no-scrollbar">
+            <div className="flex gap-1.5 overflow-x-auto px-4 py-2 border-t border-slate-200/60 bg-slate-50/80 dark:border-white/5 dark:bg-slate-950/60 no-scrollbar">
               {SUGGESTIONS.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => handleSend(s.query)}
-                  className="shrink-0 rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-[10px] font-bold text-violet-300 transition hover:bg-violet-500/30 hover:text-white cursor-pointer"
+                  className="shrink-0 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[10px] font-bold text-violet-700 transition hover:bg-violet-100 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/30 cursor-pointer"
                 >
                   {s.label}
                 </button>
@@ -206,15 +206,15 @@ const CyberTerminalChatbot = () => {
             </div>
 
             {/* Command Input Area */}
-            <div className="flex items-center gap-2 border-t border-white/10 bg-slate-950/90 px-4 py-3">
-              <span className="text-cyan-400 font-bold">$</span>
+            <div className="flex items-center gap-2 border-t border-slate-200/80 bg-slate-50/90 px-4 py-3 dark:border-white/10 dark:bg-slate-950/90">
+              <span className="text-violet-600 dark:text-cyan-400 font-bold">$</span>
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask anything or type /help..."
-                className="flex-1 bg-transparent text-xs text-white placeholder-slate-500 outline-none font-code"
+                className="flex-1 bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none font-code dark:text-white dark:placeholder-slate-500"
               />
               <button
                 onClick={() => handleSend()}
