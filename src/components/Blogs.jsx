@@ -2,146 +2,121 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { HASHNODE_USERNAME } from "../constants";
-import { FaBookOpen, FaExternalLinkAlt } from "react-icons/fa";
+import { FiBookOpen, FiArrowUpRight, FiClock, FiChevronDown } from "react-icons/fi";
 import { SiHashnode } from "react-icons/si";
 
 const POSTS_URL = "/hashnode-posts.json";
 
-const fetchHashnodePosts = async ({ limit, signal }) => {
-  const res = await fetch(POSTS_URL, { signal });
-  if (!res.ok) {
-    throw new Error("Failed to load Hashnode posts.");
-  }
-
-  const data = await res.json();
-  const posts = Array.isArray(data?.posts) ? data.posts : [];
-
-  return posts
-    .slice(0, limit)
-    .map((node) => ({
-      title: node.title,
-      link: node.link,
-      excerpt: (node.excerpt ?? "").trim().slice(0, 150),
-      date: node.publishedAt ? new Date(node.publishedAt) : null,
-    }));
-};
-
-const Blogs = ({ limit = 4 }) => {
+const Blogs = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        if (!HASHNODE_USERNAME) {
-          throw new Error("Hashnode username is missing.");
+    fetch(POSTS_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.posts) {
+          setPosts(data.posts);
         }
-
-        const parsed = await fetchHashnodePosts({ limit, signal: controller.signal });
-        setPosts(parsed);
-      } catch (e) {
-        if (controller.signal.aborted) return;
-        setError("Blogs are unavailable right now.");
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    };
-
-    load();
-    return () => {
-      controller.abort();
-    };
-  }, [limit]);
+      })
+      .catch((err) => {
+        console.error("Failed to load blog posts:", err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <section id="blogs" className="relative scroll-mt-28 pb-24">
+    <section id="blogs" className="relative scroll-mt-24 pb-20">
       <SectionHeading
-        eyebrow="TECHNICAL ARTICLES"
-        title="Blog Posts & Engineering Notes"
-        subtitle="Insights on full stack architecture, DevOps automation, and GenAI applications."
+        eyebrow="PUBLICATIONS & WRITING"
+        title="Engineering Articles"
+        subtitle="Deep dives on backend architecture, request lifecycles, and applied generative AI systems."
       />
 
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-4xl">
         {loading ? (
-          <div className="flex justify-center py-12">
-            <span className="text-sm font-bold font-code text-violet-500 animate-pulse">
-              &gt; Syncing latest Hashnode publications...
-            </span>
+          <div className="text-center text-sm text-slate-500 py-12">
+            Loading articles...
           </div>
-        ) : null}
+        ) : (
+          <>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {posts.map((post, index) => {
+                const isHiddenOnMobile = !expanded && index > 0;
+                return (
+                  <a
+                    key={post.link}
+                    href={post.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`group glass-panel interactive-card flex-col justify-between rounded-2xl p-6 transition-all ${
+                      isHiddenOnMobile ? "hidden sm:flex" : "flex"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 text-xs text-slate-700 dark:text-slate-300 font-semibold">
+                        <span className="flex items-center gap-1.5 font-code">
+                          <FiClock className="text-slate-500 dark:text-slate-400" />
+                          5 min read
+                        </span>
+                        <span className="inline-flex items-center gap-1 font-bold text-indigo-600 dark:text-indigo-400">
+                          <SiHashnode className="text-xs" />
+                          Hashnode
+                        </span>
+                      </div>
 
-        {error ? (
-          <p className="text-center text-xs font-code text-rose-500">{error}</p>
-        ) : null}
+                      <h3 className="mt-3.5 text-base sm:text-lg font-extrabold text-slate-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        {post.title}
+                      </h3>
 
-        {!loading && !error ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {posts.map((post, index) => (
-              <motion.a
-                key={post.link}
-                href={post.link}
-                target="_blank"
-                rel="noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.1, ease: "easeOut" }}
-                whileHover={{ y: -6 }}
-                className="group glass-surface glass-card-hover relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 border border-slate-900/10 dark:border-white/10"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 px-3 py-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 font-code">
-                      <SiHashnode className="text-xs" />
-                      {post.date
-                        ? post.date.toLocaleDateString(undefined, {
-                            year: "numeric",
-                            month: "short",
-                            day: "2-digit",
-                          })
-                        : "HASHNODE"}
-                    </span>
-                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 font-code">
-                      Article
-                    </span>
-                  </div>
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-900 dark:text-slate-100 font-medium line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                    </div>
 
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-cyan-400 transition-colors">
-                    {post.title}
-                  </h3>
+                    <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-xs font-bold text-slate-900 dark:text-slate-100">
+                      <span>Read Article</span>
+                      <FiArrowUpRight className="text-sm transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
 
-                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 font-medium">
-                    {post.excerpt}
-                    {post.excerpt.length >= 150 ? "…" : ""}
-                  </p>
-                </div>
+            {/* Mobile Progressive Disclosure Toggle */}
+            {posts.length > 1 && (
+              <div className="sm:hidden mt-5 text-center">
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-xs font-bold text-slate-900 shadow-2xs transition hover:bg-slate-100 dark:border-white/15 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                >
+                  <span>
+                    {expanded
+                      ? "Show Latest Article Only"
+                      : `Show All Articles (${posts.length - 1} more)`}
+                  </span>
+                  <FiChevronDown
+                    className={`text-sm text-indigo-600 dark:text-indigo-400 transition-transform duration-300 ${
+                      expanded ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
+          </>
+        )}
 
-                <div className="mt-6 flex items-center gap-2 text-xs font-bold text-violet-600 dark:text-cyan-400 font-code pt-4 border-t border-slate-900/10 dark:border-white/10">
-                  <FaBookOpen className="text-xs" />
-                  <span>Read Article</span>
-                  <FaExternalLinkAlt className="text-[10px] transition-transform duration-300 group-hover:translate-x-1" />
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 text-center">
           <a
-            href={`https://${HASHNODE_USERNAME}.hashnode.dev/`}
+            href={`https://${HASHNODE_USERNAME}.hashnode.dev`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-2xl border border-slate-900/15 bg-white/80 px-6 py-3 text-xs font-bold text-slate-900 backdrop-blur-md transition-all hover:bg-violet-600 hover:text-white dark:border-white/15 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:bg-cyan-500 dark:hover:text-slate-950 font-code"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-900 shadow-2xs transition hover:bg-slate-100 dark:border-white/15 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800"
           >
-            <SiHashnode className="text-sm" />
-            <span>Visit Hashnode Blog</span>
-            <FaExternalLinkAlt className="text-xs" />
+            <SiHashnode className="text-blue-500" />
+            <span>Read all posts on Hashnode</span>
+            <FiArrowUpRight className="text-xs" />
           </a>
         </div>
       </div>
@@ -150,4 +125,3 @@ const Blogs = ({ limit = 4 }) => {
 };
 
 export default Blogs;
-

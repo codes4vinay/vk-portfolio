@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { HERO_CONTENT } from "../constants";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { FaFileDownload, FaExternalLinkAlt, FaRocket, FaGithub, FaTerminal } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi2";
-
-const containerVariants = {
-  hidden: { opacity: 0, x: -50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.6,
-      staggerChildren: 0.18,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-const childVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: "easeOut" },
-  },
-};
+import {
+  FiArrowDown,
+  FiDownload,
+  FiMail,
+  FiCheck,
+  FiTerminal,
+  FiExternalLink,
+  FiCode,
+  FiMaximize2,
+  FiMinimize2,
+  FiArrowRight,
+} from "react-icons/fi";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
 
 const GITHUB_USERNAME = "codes4vinay";
 const CONTRIBUTION_COLORS = [
@@ -109,11 +98,42 @@ const buildContributionCalendar = (year, contributions) => {
   return { weeks, monthLabels };
 };
 
+const CODE_SNIPPETS = {
+  proxy: {
+    filename: "chaos-proxy.ts",
+    lang: "TypeScript",
+    lines: [
+      { num: 1, text: "// Raw Node.js stream piping with fault injection" },
+      { num: 2, text: "export async function forwardWithChaos(req, res) {" },
+      { num: 3, text: "  if (metrics.p99 > THRESHOLD) return bypass(req, res);" },
+      { num: 4, text: "  await injectLatency(triangleWave(currentLoad));" },
+      { num: 5, text: "  req.pipe(targetStream).pipe(res);" },
+      { num: 6, text: "}" },
+    ],
+  },
+  rag: {
+    filename: "vector_pipeline.py",
+    lang: "Python",
+    lines: [
+      { num: 1, text: "# Semantic document retrieval & synthesis" },
+      { num: 2, text: "async def query_kb(prompt: str):" },
+      { num: 3, text: "    vec = encoder.encode(prompt)" },
+      { num: 4, text: "    context = await faiss.search(vec, k=5)" },
+      { num: 5, text: "    return await groq.complete(prompt, context)" },
+    ],
+  },
+};
+
 const Hero = () => {
+  const [heroView, setHeroView] = useState("github"); // "github" or "code"
+  const [codeTab, setCodeTab] = useState("proxy");
+  const [copied, setCopied] = useState(false);
+  const calendarScrollRef = useRef(null);
+
+  // GitHub contribution state
   const [contributionData, setContributionData] = useState(null);
   const [selectedYear, setSelectedYear] = useState("2026");
   const [loadingContributions, setLoadingContributions] = useState(true);
-  const [contributionError, setContributionError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -121,21 +141,14 @@ const Hero = () => {
     const loadContributions = async () => {
       try {
         setLoadingContributions(true);
-        setContributionError("");
-
         const response = await fetch(
           `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}`
         );
 
-        if (!response.ok) {
-          throw new Error("Unable to load contribution data.");
-        }
-
+        if (!response.ok) throw new Error("Unable to load");
         const data = await response.json();
 
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
 
         const availableYears = Object.keys(data.total ?? {})
           .sort((left, right) => Number(right) - Number(left))
@@ -144,27 +157,18 @@ const Hero = () => {
         setContributionData(data);
 
         if (availableYears.length > 0) {
-          setSelectedYear((currentYear) =>
-            availableYears.includes(currentYear)
-              ? currentYear
-              : availableYears[0]
+          setSelectedYear((current) =>
+            availableYears.includes(current) ? current : availableYears[0]
           );
         }
       } catch (error) {
-        if (!isMounted) {
-          return;
-        }
-
-        setContributionError("Contribution calendar is unavailable right now.");
+        // Fallback gracefully
       } finally {
-        if (isMounted) {
-          setLoadingContributions(false);
-        }
+        if (isMounted) setLoadingContributions(false);
       }
     };
 
     loadContributions();
-
     return () => {
       isMounted = false;
     };
@@ -178,203 +182,272 @@ const Hero = () => {
     fetchedYears.length > 0 ? fetchedYears : FALLBACK_YEARS;
 
   const selectedYearContributions =
-    contributionData?.contributions?.filter(
-      (entry) => new Date(entry.date).getUTCFullYear() === Number(selectedYear)
-    ) ?? [];
+    contributionData?.contributions?.filter((entry) => {
+      const entryYear = Number(entry.date.slice(0, 4));
+      return entryYear === Number(selectedYear);
+    }) ?? [];
+
+  const selectedYearTotal =
+    contributionData?.total?.[selectedYear] ??
+    selectedYearContributions.reduce(
+      (sum, entry) => sum + (entry.count ?? 0),
+      0
+    );
 
   const { weeks, monthLabels } = buildContributionCalendar(
     Number(selectedYear),
     selectedYearContributions
   );
 
-  const selectedYearTotal =
-    contributionData?.total?.[selectedYear] ??
-    selectedYearContributions.reduce((sum, entry) => sum + entry.count, 0);
+  const calendarWidth = weeks.length * (CELL_SIZE + CELL_GAP) - CELL_GAP;
 
-  const calendarWidth = weeks.length * CELL_SIZE + (weeks.length - 1) * CELL_GAP;
+  // Auto-scroll mobile calendar to the right edge (most recent weeks)
+  useEffect(() => {
+    if (calendarScrollRef.current) {
+      calendarScrollRef.current.scrollLeft = calendarScrollRef.current.scrollWidth;
+    }
+  }, [selectedYear, weeks]);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText("vinaykumar.2k04@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+const ANIMATED_PHRASES = [
+  "robust APIs.",
+  "realtime systems.",
+  "GenAI pipelines.",
+  "fault-tolerant proxies.",
+];
+
+  const currentSnippet = CODE_SNIPPETS[codeTab];
+
+  // Dynamic Typewriter animation for headline
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = ANIMATED_PHRASES[phraseIndex];
+    let timer;
+
+    if (!isDeleting && charIndex < currentPhrase.length) {
+      timer = setTimeout(() => {
+        setCharIndex((prev) => prev + 1);
+      }, 70);
+    } else if (!isDeleting && charIndex === currentPhrase.length) {
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2000);
+    } else if (isDeleting && charIndex > 0) {
+      timer = setTimeout(() => {
+        setCharIndex((prev) => prev - 1);
+      }, 35);
+    } else if (isDeleting && charIndex === 0) {
+      setIsDeleting(false);
+      setPhraseIndex((prev) => (prev + 1) % ANIMATED_PHRASES.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, phraseIndex]);
+
+  const displayedText = ANIMATED_PHRASES[phraseIndex].slice(0, charIndex);
 
   return (
-    <section id="home" className="relative mt-8 scroll-mt-28 pb-16 lg:pb-28">
-      <div className="flex flex-col lg:flex-row items-center gap-12">
-        {/* LEFT CONTENT */}
+    <section id="home" className="relative pt-2 sm:pt-10 pb-12 sm:pb-20 w-full max-w-full min-w-0">
+      <div className="grid gap-8 sm:gap-12 lg:grid-cols-12 lg:items-center w-full max-w-full min-w-0">
+        {/* Left Column: Authoritative Engineering Bio */}
         <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="w-full lg:w-1/2 flex flex-col items-start text-left px-2 sm:px-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="lg:col-span-6 flex flex-col items-start w-full max-w-full min-w-0"
         >
           {/* Status Badge */}
-          <motion.div variants={childVariants} className="mb-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              <HiSparkles className="text-amber-400" />
-              <span>Full Stack & GenAI Engineer</span>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 shadow-2xs dark:border-emerald-400/30 dark:bg-emerald-500/10 dark:text-emerald-300">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Available for SDE & Full Stack Roles</span>
+          </div>
+
+          {/* Main Headline with Animated Text */}
+          <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-[1.15] min-h-[66px] xs:min-h-[76px] sm:min-h-[115px] lg:min-h-[140px]">
+            Architecting{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 dark:from-indigo-400 dark:via-purple-300 dark:to-cyan-400">
+              {displayedText}
+            </span>
+            <span className="inline-block w-[3px] sm:w-[4px] h-[0.82em] ml-1 bg-indigo-600 dark:bg-indigo-400 animate-pulse align-baseline rounded-full" />
+          </h1>
+
+          {/* Subtitle / Bio */}
+          <p className="mt-3.5 sm:mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-slate-900 dark:text-slate-100 font-medium">
+            I'm <strong className="font-extrabold text-slate-950 dark:text-white">Vinay Kumar</strong>, a full stack developer focused on backend scalability, fault-tolerant network proxies, and production-ready RAG workflows. Currently shipping production APIs and search systems at <strong className="font-extrabold text-slate-950 dark:text-white">Sahii.in</strong>.
+          </p>
+
+          {/* Primary Action Buttons */}
+          <div className="mt-5 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            <a
+              href="#projects"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"
+            >
+              <span>Explore Projects</span>
+              <span className="text-xs">↓</span>
+            </a>
+
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3">
+              <a
+                href="/Vinay_Kumar_resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-slate-300 bg-white px-3 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-950 shadow-2xs transition hover:border-slate-400 hover:bg-slate-50 dark:border-white/20 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800"
+              >
+                <FiDownload className="text-indigo-600 dark:text-indigo-400 text-xs sm:text-sm" />
+                <span>Resume PDF</span>
+              </a>
+
+              <button
+                onClick={copyEmail}
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-slate-300 bg-white px-3 sm:px-4 py-3 text-xs sm:text-sm font-bold text-slate-950 shadow-2xs transition hover:bg-slate-50 dark:border-white/20 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800"
+                title="Copy email to clipboard"
+              >
+                {copied ? (
+                  <>
+                    <FiCheck className="text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm" />
+                    <span className="text-emerald-700 dark:text-emerald-300">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <FiMail className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm" />
+                    <span>Copy Email</span>
+                  </>
+                )}
+              </button>
             </div>
-          </motion.div>
+          </div>
 
-          {/* NAME */}
-          <motion.h1
-            variants={childVariants}
-            className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight"
-          >
-            <span className="bg-gradient-to-r from-slate-900 via-violet-700 to-indigo-600 bg-clip-text text-transparent dark:from-white dark:via-violet-200 dark:to-cyan-300">
-              Vinay Kumar
-            </span>
-          </motion.h1>
-
-          {/* ROLE */}
-          <motion.div
-            variants={childVariants}
-            className="mt-3 flex flex-wrap items-center justify-start gap-2 text-sm sm:text-lg font-semibold text-slate-700 dark:text-slate-300"
-          >
-            <span className="rounded-lg bg-violet-500/10 px-2.5 py-1 text-violet-600 dark:bg-violet-400/10 dark:text-violet-300">
-              Full Stack
-            </span>
-            <span className="text-slate-400">•</span>
-            <span className="rounded-lg bg-cyan-500/10 px-2.5 py-1 text-cyan-600 dark:bg-cyan-400/10 dark:text-cyan-300">
-              DevOps
-            </span>
-            <span className="text-slate-400">•</span>
-            <span className="rounded-lg bg-fuchsia-500/10 px-2.5 py-1 text-fuchsia-600 dark:bg-fuchsia-400/10 dark:text-fuchsia-300">
-              GenAI / RAG
-            </span>
-          </motion.div>
-
-
-          {/* DESCRIPTION */}
-          <motion.p
-            variants={childVariants}
-            className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 font-medium"
-          >
-            {HERO_CONTENT}
-          </motion.p>
-
-          {/* CTA BUTTONS */}
-
-          <motion.div
-            variants={childVariants}
-            className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-          >
-            {/* Download Resume */}
+          {/* Social Proof Links */}
+          <div className="mt-5 sm:mt-8 flex flex-wrap items-center gap-2 sm:gap-3 text-slate-900 dark:text-slate-100">
             <a
-              href="/Vinay_Kumar_resume.pdf"
-              download
-              className="
-                group relative inline-flex items-center justify-center gap-2.5 w-full sm:w-auto
-                rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-7 py-3.5
-                text-sm font-bold text-white shadow-xl shadow-violet-600/30
-                transition-all duration-300 hover:scale-[1.03] hover:shadow-violet-600/50
-              "
-            >
-              <FaFileDownload className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-              <span>Download Resume</span>
-            </a>
-
-            {/* Preview Resume */}
-            <a
-              href="/Vinay_Kumar_resume.pdf"
+              href="https://github.com/codes4vinay"
               target="_blank"
-              rel="noopener noreferrer"
-              className="
-                group inline-flex items-center justify-center gap-2 w-full sm:w-auto
-                rounded-2xl border border-slate-900/15 bg-white/70 px-7 py-3.5
-                text-sm font-bold text-slate-800 backdrop-blur-md transition-all duration-300
-                hover:border-violet-500/50 hover:bg-white hover:shadow-lg dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-violet-400/50 dark:hover:bg-slate-900
-              "
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-900 shadow-2xs transition hover:bg-slate-100 dark:border-white/15 dark:bg-white/[0.08] dark:text-white dark:hover:bg-white/15"
             >
-              <FaExternalLinkAlt className="text-xs text-violet-500" />
-              <span>Preview Resume</span>
+              <FaGithub className="text-sm" />
+              <span>@codes4vinay</span>
             </a>
-          </motion.div>
+
+            <a
+              href="https://www.linkedin.com/in/vinaykumar2004/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="flex items-center justify-center h-8 w-8 rounded-lg border border-slate-300 bg-white text-slate-900 shadow-2xs transition hover:text-blue-600 hover:bg-slate-100 dark:border-white/15 dark:bg-white/[0.08] dark:text-white dark:hover:bg-white/15"
+            >
+              <FaLinkedin className="text-sm" />
+            </a>
+
+            <a
+              href="https://leetcode.com/u/vinayislive/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LeetCode"
+              className="flex items-center justify-center h-8 w-8 rounded-lg border border-slate-300 bg-white text-slate-900 shadow-2xs transition hover:text-amber-600 hover:bg-slate-100 dark:border-white/15 dark:bg-white/[0.08] dark:text-white dark:hover:bg-white/15"
+            >
+              <SiLeetcode className="text-sm" />
+            </a>
+          </div>
         </motion.div>
 
-        {/* RIGHT CONTENT - GITHUB CONTRIBUTIONS DASHBOARD */}
+        {/* Right Column: Interactive GitHub Heatmap & System Spec Showcase */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.3 }}
-          className="w-full lg:w-1/2 flex justify-center px-2 sm:px-4"
+          transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+          className="lg:col-span-6 w-full max-w-full min-w-0"
         >
-          <div className="relative w-full max-w-[780px]">
-            {/* Glowing Backdrop */}
-            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-violet-600/30 via-cyan-500/20 to-fuchsia-600/30 blur-2xl dark:opacity-70 opacity-30" />
+          <div className="glass-panel overflow-hidden rounded-2xl border border-slate-200/90 shadow-xl dark:border-white/10 dark:bg-[#11141e] w-full max-w-full min-w-0">
+            {/* Card Header & View Switcher */}
+            <div className="flex items-center justify-between border-b border-slate-200/80 bg-slate-100/70 px-3 sm:px-4 py-2.5 dark:border-white/5 dark:bg-slate-900/80">
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setHeroView("github")}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
+                    heroView === "github"
+                      ? "bg-white text-slate-950 shadow-xs dark:bg-slate-800 dark:text-white"
+                      : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  }`}
+                >
+                  <FaGithub className="text-xs" />
+                  <span>GitHub</span>
+                </button>
 
-            {/* GITHUB TERMINAL CARD */}
-            <div className="relative overflow-hidden rounded-3xl border border-slate-900/10 bg-white/80 p-5 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80 sm:p-6">
-              {/* Terminal Title Bar */}
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-900/10 pb-4 dark:border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full bg-rose-500/80" />
-                    <span className="h-3 w-3 rounded-full bg-amber-500/80" />
-                    <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                  </div>
-                  <span className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 font-code">
-                    <FaTerminal className="text-violet-500" />
-                    github-contributions.sh
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <FaGithub className="text-lg text-slate-800 dark:text-slate-200" />
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                    @{GITHUB_USERNAME}
-                  </span>
-                </div>
+                <button
+                  onClick={() => setHeroView("code")}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
+                    heroView === "code"
+                      ? "bg-white text-slate-950 shadow-xs dark:bg-slate-800 dark:text-white"
+                      : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  }`}
+                >
+                  <FiCode className="text-xs" />
+                  <span>Spec</span>
+                </button>
               </div>
 
-              {/* Summary Header */}
-              <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white font-code">
-                    {selectedYearTotal}{" "}
-                    <span className="text-violet-600 dark:text-cyan-400 text-sm font-normal">
-                      contributions in {selectedYear}
-                    </span>
-                  </h3>
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                    Verified GitHub commits & activity
-                  </p>
-                </div>
+              <a
+                href={`https://github.com/${GITHUB_USERNAME}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:underline dark:text-indigo-400 font-code"
+              >
+                <span>@{GITHUB_USERNAME}</span>
+              </a>
+            </div>
 
-                {/* Year Selectors */}
-                <div className="flex items-center gap-1.5">
-                  {availableYears.map((year) => {
-                    const isActive = selectedYear === year;
+            {/* View 1: GitHub Contribution Heatmap */}
+            {heroView === "github" ? (
+              <div className="p-3.5 sm:p-5">
+                {/* Year Total & Year Selector Pills */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div>
+                    <div className="text-base sm:text-lg font-extrabold text-slate-950 dark:text-white font-code">
+                      {selectedYearTotal}{" "}
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        commits in {selectedYear}
+                      </span>
+                    </div>
+                  </div>
 
-                    return (
+                  <div className="flex items-center gap-1">
+                    {availableYears.map((yr) => (
                       <button
-                        key={year}
-                        type="button"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setSelectedYear(year);
-                        }}
-                        className={`rounded-xl border px-3 py-1 text-xs font-bold font-code transition-all ${
-                          isActive
-                            ? "border-violet-500 bg-violet-600 text-white shadow-md shadow-violet-600/30 dark:border-cyan-400 dark:bg-cyan-500/20 dark:text-cyan-300"
-                            : "border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800"
+                        key={yr}
+                        onClick={() => setSelectedYear(yr)}
+                        className={`rounded-lg px-2 py-0.5 text-xs font-bold font-code transition ${
+                          selectedYear === yr
+                            ? "bg-indigo-600 text-white shadow-xs"
+                            : "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-200 dark:hover:text-white"
                         }`}
                       >
-                        {year}
+                        {yr}
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Grid Box */}
-              <div className="rounded-2xl border border-slate-900/10 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-slate-900/80">
-                <div className="overflow-x-auto">
-                  <div className="min-w-[620px]">
-                    {/* Months row */}
-                    <div className="mb-2.5 grid grid-cols-[36px_1fr] gap-2">
+                {/* Contribution Calendar Squares Grid */}
+                <div
+                  ref={calendarScrollRef}
+                  className="w-full max-w-full overflow-x-auto touch-scroll no-scrollbar rounded-xl border border-slate-200/60 bg-slate-50/70 p-3 dark:border-white/5 dark:bg-[#0c0e16]"
+                >
+                  <div style={{ width: `${calendarWidth + 36}px`, minWidth: `${calendarWidth + 36}px` }}>
+                    {/* Month labels */}
+                    <div className="mb-2 grid grid-cols-[28px_1fr] gap-1">
                       <div />
                       <div
-                        className="relative h-4 text-[11px] font-medium text-slate-500 dark:text-slate-400 font-code"
+                        className="relative h-4 text-[10px] font-bold text-slate-700 dark:text-slate-300 font-code select-none"
                         style={{ width: `${calendarWidth}px` }}
                       >
                         {monthLabels.map((month) => (
@@ -391,39 +464,30 @@ const Hero = () => {
                       </div>
                     </div>
 
-                    {/* Days & Tiles */}
-                    <div className="grid grid-cols-[36px_1fr] gap-2">
+                    {/* Weekday labels + Week columns */}
+                    <div className="grid grid-cols-[28px_1fr] gap-1">
                       <div
-                        className="grid text-[10px] font-semibold text-slate-500 dark:text-slate-400 font-code"
+                        className="grid text-[9px] font-bold text-slate-700 dark:text-slate-300 font-code select-none"
                         style={{
                           gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
                           rowGap: `${CELL_GAP}px`,
                         }}
                       >
-                        {Array.from({ length: 7 }).map((_, rowIndex) => {
-                          const label = WEEKDAY_LABELS.find(
-                            (day) => day.row === rowIndex
-                          );
-
-                          return (
-                            <span
-                              key={`weekday-${rowIndex}`}
-                              className="flex items-center"
-                              style={{ height: `${CELL_SIZE}px` }}
-                            >
-                              {label?.label ?? ""}
-                            </span>
-                          );
-                        })}
+                        {WEEKDAY_LABELS.map((lbl) => (
+                          <span
+                            key={lbl.label}
+                            className="flex items-center"
+                            style={{ gridRow: lbl.row + 1 }}
+                          >
+                            {lbl.label}
+                          </span>
+                        ))}
                       </div>
 
-                      <div
-                        className="flex"
-                        style={{ columnGap: `${CELL_GAP}px` }}
-                      >
-                        {weeks.map((week, weekIndex) => (
+                      <div className="flex" style={{ columnGap: `${CELL_GAP}px` }}>
+                        {weeks.map((week, wIdx) => (
                           <div
-                            key={`week-${weekIndex}`}
+                            key={wIdx}
                             className="grid"
                             style={{
                               gridTemplateRows: `repeat(7, ${CELL_SIZE}px)`,
@@ -431,18 +495,16 @@ const Hero = () => {
                             }}
                           >
                             {week.map((day) => {
-                              const backgroundColor = day.isCurrentYear
-                                ? CONTRIBUTION_COLORS[day.level] ??
-                                  CONTRIBUTION_COLORS[0]
+                              const bg = day.isCurrentYear
+                                ? CONTRIBUTION_COLORS[day.level] ?? CONTRIBUTION_COLORS[0]
                                 : "var(--contribution-empty)";
-
                               return (
                                 <span
                                   key={day.date}
                                   title={`${day.count} contributions on ${day.date}`}
-                                  className="rounded-[3px] transition-transform hover:scale-125"
+                                  className="rounded-[2px] transition-transform hover:scale-125"
                                   style={{
-                                    backgroundColor,
+                                    backgroundColor: bg,
                                     width: `${CELL_SIZE}px`,
                                     height: `${CELL_SIZE}px`,
                                   }}
@@ -456,45 +518,87 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-code">
+                {/* Mobile Touch Navigation Hint */}
+                <div className="sm:hidden mt-2 flex items-center justify-between text-[11px] text-slate-700 dark:text-slate-300 font-bold font-code">
+                  <span>← Swipe for full history</span>
+                  <span>Latest activity →</span>
+                </div>
+
+                {/* Footer Legend */}
+                <div className="mt-2.5 flex items-center justify-between text-[11px] sm:text-xs text-slate-800 dark:text-slate-200 font-semibold font-code">
                   <a
                     href={`https://github.com/${GITHUB_USERNAME}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 hover:text-violet-600 dark:hover:text-cyan-400 transition"
+                    className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-bold"
                   >
-                    <span>view profile</span>
-                    <FaExternalLinkAlt className="text-[10px]" />
+                    View All Repositories →
                   </a>
 
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px]">Less</span>
+                    <span className="text-slate-700 dark:text-slate-300">Less</span>
                     <div className="flex items-center gap-1">
-                      {CONTRIBUTION_COLORS.map((color) => (
+                      {CONTRIBUTION_COLORS.map((col, idx) => (
                         <span
-                          key={color}
-                          className="h-3 w-3 rounded-xs"
-                          style={{ backgroundColor: color }}
+                          key={idx}
+                          className="h-2.5 w-2.5 rounded-[1px] border border-black/10 dark:border-white/10"
+                          style={{ backgroundColor: col }}
                         />
                       ))}
                     </div>
-                    <span className="text-[10px]">More</span>
+                    <span className="text-slate-700 dark:text-slate-300">More</span>
                   </div>
                 </div>
-
-                {loadingContributions && (
-                  <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 font-code animate-pulse">
-                    &gt; Fetching GitHub activity telemetry...
-                  </p>
-                )}
-
-                {contributionError && (
-                  <p className="mt-3 text-xs text-rose-500 font-code">
-                    ! {contributionError}
-                  </p>
-                )}
               </div>
-            </div>
+            ) : (
+              /* View 2: Code Spec Terminal */
+              <div className="p-3.5 sm:p-4 font-code text-xs leading-relaxed overflow-x-auto w-full max-w-full min-w-0">
+                <div className="flex items-center justify-between pb-2 text-xs text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 font-bold">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setCodeTab("proxy")}
+                      className={`px-2.5 py-1 rounded text-xs transition ${
+                        codeTab === "proxy" ? "bg-indigo-600 text-white font-bold" : "text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
+                      }`}
+                    >
+                      chaos-proxy.ts
+                    </button>
+                    <button
+                      onClick={() => setCodeTab("rag")}
+                      className={`px-2.5 py-1 rounded text-xs transition ${
+                        codeTab === "rag" ? "bg-indigo-600 text-white font-bold" : "text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
+                      }`}
+                    >
+                      vector_pipeline.py
+                    </button>
+                  </div>
+                  <span className="text-[11px] uppercase text-slate-700 dark:text-slate-300 font-bold">{currentSnippet.lang}</span>
+                </div>
+
+                <div className="pt-2.5 space-y-1 text-[11px] sm:text-xs font-semibold">
+                  {currentSnippet.lines.map((line) => (
+                    <div key={line.num} className="flex gap-2.5">
+                      <span className="w-4 shrink-0 select-none text-right text-slate-600 dark:text-slate-400 font-bold">
+                        {line.num}
+                      </span>
+                      <span
+                        className={`${
+                          line.text.startsWith("//") || line.text.startsWith("#")
+                            ? "text-slate-600 dark:text-slate-400 italic"
+                            : line.text.includes("export") || line.text.includes("async") || line.text.includes("def")
+                            ? "text-indigo-700 dark:text-indigo-300 font-bold"
+                            : line.text.includes("if") || line.text.includes("return")
+                            ? "text-amber-700 dark:text-amber-300 font-bold"
+                            : "text-slate-950 dark:text-slate-100"
+                        }`}
+                      >
+                        {line.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
@@ -503,4 +607,3 @@ const Hero = () => {
 };
 
 export default Hero;
-

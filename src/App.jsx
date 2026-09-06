@@ -4,57 +4,54 @@ import Navbar from "./components/Navbar";
 import "./index.css";
 import Background from "./components/Background";
 import Hero from "./components/Hero";
-import LeetCodeHeatmap from "./components/LeetCodeHeatmap";
 import About from "./components/About";
-import Technologies from "./components/Technologies";
-import Experience from "./components/Experience";
-import Blogs from "./components/Blogs";
 import Projects from "./components/Projects";
+import Experience from "./components/Experience";
+import Technologies from "./components/Technologies";
+import ActivitySection from "./components/ActivitySection";
+import Blogs from "./components/Blogs";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Loader from "./components/Loader";
 import ScrollToTop from "./components/ScrollToTop";
-import CyberTerminalChatbot from "./components/CyberTerminalChatbot";
+import CommandPalette from "./components/CommandPalette";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   return (
-    <div className="relative isolate min-h-screen overflow-x-hidden bg-transparent text-slate-800 antialiased selection:bg-violet-300/40 selection:text-slate-950 dark:text-slate-200 dark:selection:bg-fuchsia-400/20 dark:selection:text-slate-100">
+    <div className="relative isolate min-h-screen overflow-x-hidden bg-transparent text-slate-900 antialiased selection:bg-indigo-500/20 selection:text-indigo-900 dark:text-slate-100 dark:selection:bg-indigo-500/30 dark:selection:text-indigo-200">
       <AnimatePresence mode="wait">
         {loading && <Loader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
       <Background />
-      <Navbar />
+      <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
       <ScrollToTop />
-      <CyberTerminalChatbot />
+      <CommandPalette isOpen={commandPaletteOpen} setIsOpen={setCommandPaletteOpen} />
 
-
-
-      <motion.div
-        className="relative z-10 mx-auto max-w-6xl px-4 pt-24 sm:px-6 lg:px-8"
-        initial={{ opacity: 0, y: 15 }}
+      <motion.main
+        className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 w-full max-w-full min-w-0"
+        initial={{ opacity: 0, y: 10 }}
         animate={{
           opacity: loading ? 0 : 1,
-          y: loading ? 15 : 0,
+          y: loading ? 10 : 0,
         }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        style={{ willChange: "opacity, transform" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <Hero />
-        <LeetCodeHeatmap />
         <About />
-        <Technologies />
         <Experience />
         <Projects />
+        <Technologies />
+        <ActivitySection />
         <Blogs />
         <Contact />
         <Footer />
-      </motion.div>
+      </motion.main>
     </div>
   );
 }
 
 export default App;
-

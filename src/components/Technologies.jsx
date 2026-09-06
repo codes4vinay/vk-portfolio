@@ -1,268 +1,139 @@
 import React, { useState } from "react";
-import { RiReactjsLine, RiTailwindCssFill } from "react-icons/ri";
-import { TbBrandMongodb, TbBrandGithub } from "react-icons/tb";
-import {
-  FaNodeJs,
-  FaJava,
-  FaHtml5,
-  FaCss3Alt,
-  FaGitAlt,
-  FaDocker,
-  FaLinux,
-  FaAws,
-  FaDatabase,
-  FaBrain,
-} from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   SiJavascript,
   SiTypescript,
-  SiExpress,
   SiPython,
-  SiVite,
-  SiPostman,
-  SiNpm,
-  SiGithubactions,
-  SiCloudflare,
-  SiRender,
-  SiNginx,
-  SiZod,
   SiFastapi,
+  SiExpress,
+  SiMongodb,
   SiRedis,
+  SiPostgresql,
+  SiDocker,
+  SiAmazonwebservices,
+  SiLinux,
+  SiGithubactions,
+  SiNginx,
+  SiReact,
+  SiTailwindcss,
+  SiVite,
+  SiZod,
+  SiGoogle,
+  SiPrisma,
+  SiMeilisearch,
 } from "react-icons/si";
-import { motion, AnimatePresence } from "framer-motion";
+import { FaJava, FaNodeJs, FaBrain, FaDatabase } from "react-icons/fa";
 import SectionHeading from "./SectionHeading";
+
+const TECH_DATA = [
+  // Languages
+  { name: "TypeScript", role: "Strict Types & Contracts", category: "Languages", icon: <SiTypescript className="text-blue-500" /> },
+  { name: "JavaScript (ES6+)", role: "Async/Await & Event Loop", category: "Languages", icon: <SiJavascript className="text-yellow-400" /> },
+  { name: "Python", role: "FastAPI & AI Pipelines", category: "Languages", icon: <SiPython className="text-sky-400" /> },
+  { name: "Java", role: "OOP & Core Algorithms", category: "Languages", icon: <FaJava className="text-red-500" /> },
+
+  // Backend & APIs
+  { name: "Node.js", role: "Raw Streams & High Concurrency", category: "Backend & Systems", icon: <FaNodeJs className="text-emerald-500" /> },
+  { name: "Express.js", role: "REST APIs & Middleware", category: "Backend & Systems", icon: <SiExpress className="text-slate-700 dark:text-slate-300" /> },
+  { name: "FastAPI", role: "High Performance Async APIs", category: "Backend & Systems", icon: <SiFastapi className="text-teal-500" /> },
+  { name: "MongoDB", role: "Indexing & Aggregations", category: "Backend & Systems", icon: <SiMongodb className="text-emerald-500" /> },
+  { name: "Redis", role: "Caching & Background Queues", category: "Backend & Systems", icon: <SiRedis className="text-rose-500" /> },
+  { name: "SQL & Relational", role: "Data Schemas & Joins", category: "Backend & Systems", icon: <FaDatabase className="text-indigo-400" /> },
+  { name: "Prisma ORM", role: "Type-Safe DB Modeling", category: "Backend & Systems", icon: <SiPrisma className="text-teal-400" /> },
+  { name: "Meilisearch", role: "Typo-Tolerant Fast Search", category: "Backend & Systems", icon: <SiMeilisearch className="text-rose-400" /> },
+  { name: "Zod", role: "Runtime Schema Validation", category: "Backend & Systems", icon: <SiZod className="text-blue-400" /> },
+
+  // GenAI & Data
+  { name: "Pinecone", role: "Managed Vector Search", category: "GenAI & Data", icon: <FaBrain className="text-indigo-500" /> },
+  { name: "FAISS", role: "Local Semantic Similarity", category: "GenAI & Data", icon: <FaBrain className="text-emerald-400" /> },
+  { name: "RAG Architecture", role: "Context Retrieval & Synthesis", category: "GenAI & Data", icon: <FaBrain className="text-amber-400" /> },
+  { name: "Gemini API", role: "Multimodal & Tool Calling", category: "GenAI & Data", icon: <SiGoogle className="text-blue-500" /> },
+
+  // DevOps & Cloud
+  { name: "Docker", role: "Multi-stage Containerization", category: "Cloud & DevOps", icon: <SiDocker className="text-sky-500" /> },
+  { name: "AWS", role: "Cloud Services & Hosting", category: "Cloud & DevOps", icon: <SiAmazonwebservices className="text-amber-500" /> },
+  { name: "GitHub Actions", role: "CI/CD Automated Pipelines", category: "Cloud & DevOps", icon: <SiGithubactions className="text-blue-400" /> },
+  { name: "Linux / Bash", role: "Server Management & Scripting", category: "Cloud & DevOps", icon: <SiLinux className="text-amber-400" /> },
+  { name: "Nginx", role: "Reverse Proxy & Load Balancing", category: "Cloud & DevOps", icon: <SiNginx className="text-emerald-500" /> },
+
+  // Frontend
+  { name: "React 19", role: "Component State & Hooks", category: "Frontend", icon: <SiReact className="text-sky-400" /> },
+  { name: "Tailwind CSS", role: "Utility-First Design Tokens", category: "Frontend", icon: <SiTailwindcss className="text-teal-400" /> },
+  { name: "Vite", role: "Lightning Fast Bundling", category: "Frontend", icon: <SiVite className="text-purple-400" /> },
+];
+
+const CATEGORIES = ["All", "Backend & Systems", "Languages", "GenAI & Data", "Cloud & DevOps", "Frontend"];
 
 const Technologies = () => {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = ["All", "Languages", "Backend & APIs", "GenAI & Data", "Frontend", "DevOps & Cloud"];
-
-  const techStack = [
-    // Programming Languages
-    {
-      name: "JavaScript",
-      category: "Languages",
-      icon: <SiJavascript className="text-3xl text-yellow-400" />,
-    },
-    {
-      name: "TypeScript",
-      category: "Languages",
-      icon: <SiTypescript className="text-3xl text-blue-500" />,
-    },
-    {
-      name: "Python",
-      category: "Languages",
-      icon: <SiPython className="text-3xl text-blue-400" />,
-    },
-    {
-      name: "Java",
-      category: "Languages",
-      icon: <FaJava className="text-3xl text-red-500" />,
-    },
-
-    // Backend & APIs
-    {
-      name: "Node.js",
-      category: "Backend & APIs",
-      icon: <FaNodeJs className="text-3xl text-emerald-500" />,
-    },
-    {
-      name: "Express.js",
-      category: "Backend & APIs",
-      icon: <SiExpress className="text-3xl text-slate-700 dark:text-slate-200" />,
-    },
-    {
-      name: "FastAPI",
-      category: "Backend & APIs",
-      icon: <SiFastapi className="text-3xl text-teal-500" />,
-    },
-    {
-      name: "Zod",
-      category: "Backend & APIs",
-      icon: <SiZod className="text-3xl text-indigo-500" />,
-    },
-    {
-      name: "Postman",
-      category: "Backend & APIs",
-      icon: <SiPostman className="text-3xl text-orange-500" />,
-    },
-
-    // GenAI & Data
-    {
-      name: "LangChain",
-      category: "GenAI & Data",
-      icon: <FaBrain className="text-3xl text-amber-500" />,
-    },
-    {
-      name: "MongoDB",
-      category: "GenAI & Data",
-      icon: <TbBrandMongodb className="text-3xl text-emerald-500" />,
-    },
-    {
-      name: "Pinecone",
-      category: "GenAI & Data",
-      icon: <FaDatabase className="text-3xl text-violet-500" />,
-    },
-    {
-      name: "Redis",
-      category: "GenAI & Data",
-      icon: <SiRedis className="text-3xl text-rose-500" />,
-    },
-    {
-      name: "SQL",
-      category: "GenAI & Data",
-      icon: <FaDatabase className="text-3xl text-sky-500" />,
-    },
-
-    // Frontend
-    {
-      name: "React",
-      category: "Frontend",
-      icon: <RiReactjsLine className="text-3xl text-cyan-400" />,
-    },
-    {
-      name: "TailwindCSS",
-      category: "Frontend",
-      icon: <RiTailwindCssFill className="text-3xl text-sky-400" />,
-    },
-    {
-      name: "Vite",
-      category: "Frontend",
-      icon: <SiVite className="text-3xl text-purple-400" />,
-    },
-    {
-      name: "HTML5",
-      category: "Frontend",
-      icon: <FaHtml5 className="text-3xl text-orange-600" />,
-    },
-    {
-      name: "CSS3",
-      category: "Frontend",
-      icon: <FaCss3Alt className="text-3xl text-blue-600" />,
-    },
-
-    // DevOps & Cloud
-    {
-      name: "Docker",
-      category: "DevOps & Cloud",
-      icon: <FaDocker className="text-3xl text-sky-500" />,
-    },
-    {
-      name: "AWS",
-      category: "DevOps & Cloud",
-      icon: <FaAws className="text-3xl text-amber-500" />,
-    },
-    {
-      name: "Linux",
-      category: "DevOps & Cloud",
-      icon: <FaLinux className="text-3xl text-slate-800 dark:text-slate-200" />,
-    },
-    {
-      name: "GitHub Actions",
-      category: "DevOps & Cloud",
-      icon: <SiGithubactions className="text-3xl text-blue-500" />,
-    },
-    {
-      name: "Git",
-      category: "DevOps & Cloud",
-      icon: <FaGitAlt className="text-3xl text-orange-500" />,
-    },
-    {
-      name: "Nginx",
-      category: "DevOps & Cloud",
-      icon: <SiNginx className="text-3xl text-emerald-600" />,
-    },
-    {
-      name: "Cloudflare",
-      category: "DevOps & Cloud",
-      icon: <SiCloudflare className="text-3xl text-orange-500" />,
-    },
-    {
-      name: "Render",
-      category: "DevOps & Cloud",
-      icon: <SiRender className="text-3xl text-purple-500" />,
-    },
-  ];
-
-
-  const filteredTech =
-    activeCategory === "All"
-      ? techStack
-      : techStack.filter((item) => item.category === activeCategory);
+  const filtered = TECH_DATA.filter(
+    (item) => activeCategory === "All" || item.category === activeCategory
+  );
 
   return (
-    <section id="technologies" className="relative scroll-mt-28 pb-24">
+    <section id="technologies" className="relative scroll-mt-24 pb-20">
       <SectionHeading
         eyebrow="TECHNICAL TOOLBOX"
-        title="Technologies & Frameworks"
-        subtitle="Tools, languages, databases, and platforms I use to build scalable products."
+        title="Skills & Technologies"
+        subtitle="Tools and technologies I use daily to design, construct, and deploy reliable software products."
       />
 
-      <div className="mx-auto max-w-5xl">
-        {/* Category Tabs with Animated Pill */}
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setActiveCategory(cat)}
-                className={`relative rounded-full px-4 py-2 text-xs font-bold font-code transition-colors duration-200 ${
-                  isActive
-                    ? "text-white dark:text-slate-950"
-                    : "border border-slate-900/10 bg-white/70 text-slate-700 hover:bg-slate-900/10 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-white/10"
-                }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="active-tech-category-pill"
-                    className="absolute inset-0 rounded-full bg-violet-600 shadow-lg shadow-violet-600/30 dark:bg-cyan-500 dark:shadow-cyan-500/30 z-0"
-                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">{cat}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* Category Filter Pills */}
+      <div className="mb-8 sm:mb-10 flex items-center justify-start sm:justify-center gap-2 overflow-x-auto touch-scroll no-scrollbar pb-2 px-1">
+        {CATEGORIES.map((cat) => {
+          const isActive = activeCategory === cat;
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+                isActive
+                  ? "bg-slate-950 text-white shadow-xs dark:bg-white dark:text-slate-950"
+                  : "border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:text-slate-950 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-white/25 dark:hover:text-white"
+              }`}
+            >
+              {cat}
+            </button>
+          );
+        })}
+      </div>
 
-        {/* Tech Grid - Keyed by Category for Instant Smooth Transition */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
-          >
-            {filteredTech.map((tech) => (
+      {/* Grid */}
+      <div className="mx-auto max-w-5xl">
+        <motion.div
+          layout
+          className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-4"
+        >
+          <AnimatePresence>
+            {filtered.map((item) => (
               <motion.div
-                key={tech.name}
-                whileHover={{ y: -5, scale: 1.03 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="group glass-surface relative flex flex-col items-center justify-center rounded-2xl border border-slate-900/10 p-5 text-center dark:border-white/10 glass-card-hover"
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
+                key={item.name}
+                className="glass-panel interactive-card flex items-center gap-2.5 sm:gap-3.5 rounded-xl sm:rounded-2xl p-2.5 sm:p-4"
               >
-                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-900/5 bg-slate-900/5 shadow-inner transition-transform duration-300 group-hover:scale-110 dark:border-white/10 dark:bg-slate-900/80">
-                  {tech.icon}
+                <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-slate-100 text-lg sm:text-2xl dark:bg-white/[0.04]">
+                  {item.icon}
                 </div>
-                <p className="text-xs font-bold text-slate-900 dark:text-slate-200 font-code">
-                  {tech.name}
-                </p>
-                <span className="mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
-                  {tech.category}
-                </span>
+                <div className="min-w-0 flex-1">
+                  <h4 className="truncate text-xs sm:text-sm font-extrabold text-slate-950 dark:text-white">
+                    {item.name}
+                  </h4>
+                  <p className="text-[10px] sm:text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-tight line-clamp-1">
+                    {item.role}
+                  </p>
+                </div>
               </motion.div>
             ))}
-          </motion.div>
-        </AnimatePresence>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );
 };
 
 export default Technologies;
-
-
-

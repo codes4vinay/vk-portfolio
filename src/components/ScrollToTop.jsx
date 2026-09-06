@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowUp } from "react-icons/fa";
+import { FiArrowUp } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ScrollToTop = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 250) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShow(window.scrollY > 400);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -24,19 +20,18 @@ const ScrollToTop = () => {
 
   return (
     <AnimatePresence>
-      {showScrollTop && (
+      {show && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.6, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.6, y: 20 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.2 }}
           type="button"
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          className="fixed bottom-8 left-6 sm:bottom-10 sm:left-8 z-[9999] flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-500/30 bg-slate-900/90 text-cyan-400 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-cyan-400 hover:bg-cyan-500 hover:text-slate-950 dark:border-cyan-400/40 dark:bg-slate-950/90 dark:text-cyan-300 dark:hover:bg-cyan-400 dark:hover:text-slate-950 cursor-pointer group"
+          className="fixed bottom-6 right-6 z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/90 text-slate-700 shadow-md backdrop-blur-md transition hover:bg-white hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/90 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white cursor-pointer"
         >
-          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 blur-md opacity-40 group-hover:opacity-100 transition-opacity" />
-          <FaArrowUp className="relative text-sm transition-transform duration-300 group-hover:-translate-y-0.5" />
+          <FiArrowUp className="text-sm" />
         </motion.button>
       )}
     </AnimatePresence>
