@@ -1,49 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  font-family: "Inter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --surface: #ffffff;
-  --surface-border: rgba(15, 23, 42, 0.12);
-  --text-primary: #020617;
-  --text-secondary: #0f172a;
-  --text-muted: #334155;
-  --accent: #4338ca;
-  --accent-light: #4f46e5;
-
-  --contribution-empty: #ebedf0;
-  --contribution-level-0: #ebedf0;
-  --contribution-level-1: #9be9a8;
-  --contribution-level-2: #40c463;
-  --contribution-level-3: #30a14e;
-  --contribution-level-4: #216e39;
-}
-
-.dark {
-  --bg-primary: #08090d;
-  --bg-secondary: #0d0f17;
-  --surface: #11141e;
-  --surface-border: rgba(255, 255, 255, 0.12);
-  --text-primary: #ffffff;
-  --text-secondary: #f1f5f9;
-  --text-muted: #cbd5e1;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-
-  --contribution-empty: #161b22;
-  --contribution-level-0: #161b22;
-  --contribution-level-1: #0e4429;
-  --contribution-level-2: #006d32;
-  --contribution-level-3: #26a641;
-  --contribution-level-4: #39d353;
+  font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --app-height: 100vh;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 5rem;
   overflow-x: hidden;
 }
 
@@ -52,168 +17,73 @@ body,
 #root {
   min-height: 100%;
   width: 100%;
-  max-width: 100vw;
   overflow-x: hidden;
 }
 
 body {
-  color-scheme: light;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-weight: 450;
-  line-height: 1.6;
-  text-rendering: optimizeLegibility;
+  background-color: #070b14;
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.dark body {
-  color-scheme: dark;
-  background-color: #08090d;
-  color: #f8fafc;
+.font-mono {
+  font-family: var(--font-mono);
 }
 
-/* Monospace font utility for code and tech data */
-.font-code {
-  font-family: "JetBrains Mono", monospace;
-  font-feature-settings: "calt" 1;
-}
-
-/* Bespoke subtle glass surface */
-.glass-panel {
-  background-color: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 1px 4px -1px rgba(15, 23, 42, 0.05);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.dark .glass-panel {
-  background-color: rgba(17, 20, 30, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-/* Interactive Card Hover */
-.interactive-card {
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.22s ease,
-              box-shadow 0.22s ease;
-}
-
-@media (hover: hover) {
-  .interactive-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(99, 102, 241, 0.35);
-    box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
-  .dark .interactive-card:hover {
-    border-color: rgba(129, 140, 248, 0.35);
-    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(99, 102, 241, 0.15);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Floating Navigation Bar */
-.glass-navbar {
-  background-color: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+@keyframes fadeScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translate(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translate(0);
+  }
 }
 
-.dark .glass-navbar {
-  background-color: rgba(13, 16, 24, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+@keyframes logo-loop-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 24px));
+  }
 }
 
-/* Focused elements */
-:focus-visible {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
-  border-radius: 8px;
+.animate-fadeSlideUp {
+  animation: fadeSlideUp 0.6s ease forwards;
 }
 
-/* Custom scrollbars */
-*::-webkit-scrollbar {
+.animate-fadeScaleIn {
+  animation: fadeScaleIn 0.8s ease forwards;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
   width: 6px;
-  height: 6px;
 }
 
-*::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
 
-*::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 999px;
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 9999px;
 }
 
-.dark *::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
-}
-
-.dark *::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Hide scrollbar utility for mobile touch carousels */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Subtle dot background grid */
-.bg-grid-pattern {
-  background-image: radial-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-.dark .bg-grid-pattern {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* iOS Safari Smooth Touch Scrolling */
-.touch-scroll {
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Text clamp helper */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.4);
 }

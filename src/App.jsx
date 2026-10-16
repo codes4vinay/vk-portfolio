@@ -1,55 +1,59 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "./components/Navbar";
-import "./index.css";
+import React, { useEffect } from "react";
 import Background from "./components/Background";
+import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Projects from "./components/Projects";
 import Experience from "./components/Experience";
-import Technologies from "./components/Technologies";
+import Skills from "./components/Skills";
 import ActivitySection from "./components/ActivitySection";
-import Blogs from "./components/Blogs";
+import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import Loader from "./components/Loader";
-import ScrollToTop from "./components/ScrollToTop";
-import CommandPalette from "./components/CommandPalette";
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  // Sync visual viewport height with CSS variable --app-height matching target site
+  useEffect(() => {
+    const syncAppHeight = () => {
+      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${h}px`);
+    };
+
+    syncAppHeight();
+    window.visualViewport?.addEventListener("resize", syncAppHeight);
+    window.visualViewport?.addEventListener("scroll", syncAppHeight);
+    window.addEventListener("orientationchange", syncAppHeight);
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", syncAppHeight);
+      window.visualViewport?.removeEventListener("scroll", syncAppHeight);
+      window.removeEventListener("orientationchange", syncAppHeight);
+    };
+  }, []);
 
   return (
-    <div className="relative isolate min-h-screen overflow-x-hidden bg-transparent text-slate-900 antialiased selection:bg-indigo-500/20 selection:text-indigo-900 dark:text-slate-100 dark:selection:bg-indigo-500/30 dark:selection:text-indigo-200">
-      <AnimatePresence mode="wait">
-        {loading && <Loader onComplete={() => setLoading(false)} />}
-      </AnimatePresence>
-
+    <div className="relative w-full min-h-[100svh] overflow-x-hidden selection:bg-indigo-500/20 selection:text-indigo-900">
+      {/* Target Portfolio Canvas Background */}
       <Background />
-      <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
-      <ScrollToTop />
-      <CommandPalette isOpen={commandPaletteOpen} setIsOpen={setCommandPaletteOpen} />
 
-      <motion.main
-        className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 w-full max-w-full min-w-0"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{
-          opacity: loading ? 0 : 1,
-          y: loading ? 10 : 0,
-        }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Technologies />
-        <ActivitySection />
-        <Blogs />
-        <Contact />
+      <div className="relative z-10 w-full">
+        {/* Floating Goo Header Navigation */}
+        <header>
+          <Navbar />
+        </header>
+
+        {/* Main Content Sections */}
+        <main>
+          <Hero />
+          <About />
+          <Experience />
+          <Skills />
+          <ActivitySection />
+          <Projects />
+          <Contact />
+        </main>
+
         <Footer />
-      </motion.main>
+      </div>
     </div>
   );
 }

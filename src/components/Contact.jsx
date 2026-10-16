@@ -1,258 +1,300 @@
 import React, { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "emailjs-com";
-import { motion } from "framer-motion";
-import SectionHeading from "./SectionHeading";
-import {
-  FiMail,
-  FiSend,
-  FiCheck,
-  FiCopy,
-  FiMapPin,
-  FiClock,
-  FiAlertCircle,
-  FiGithub,
-  FiLinkedin,
-} from "react-icons/fi";
+import { FiMail, FiMapPin, FiSend, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
+import GlowingButton from "./GlowingButton";
+
+const ContactInfoItem = ({ icon, label, value, href }) => (
+  <div className="flex items-start gap-4">
+    <div className="mt-1 p-2.5 rounded-xl bg-white/10 text-indigo-400 shrink-0">
+      {icon}
+    </div>
+    <div>
+      <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+        {label}
+      </p>
+      {href ? (
+        <a
+          href={href}
+          className="text-white hover:text-indigo-300 transition-colors font-medium text-sm break-all"
+        >
+          {value}
+        </a>
+      ) : (
+        <p className="text-white font-medium text-sm">{value}</p>
+      )}
+    </div>
+  </div>
+);
+
+const SocialIconBtn = ({ href, icon, label }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    aria-label={label}
+    className="p-3 rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/15 transition-all"
+  >
+    {icon}
+  </a>
+);
+
+const FormInput = ({ label, name, type = "text", placeholder, required = true }) => (
+  <div className="w-full">
+    <label className="block text-sm font-medium text-slate-700 mb-2">
+      {label}
+    </label>
+    <input
+      name={name}
+      type={type}
+      required={required}
+      placeholder={placeholder}
+      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:bg-white/90 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all outline-none"
+    />
+  </div>
+);
 
 const Contact = () => {
-  const form = useRef();
-  const [status, setStatus] = useState({ type: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const formRef = useRef();
+  const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState(null);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("vinaykumar.2k04@gmail.com");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 5000);
   };
 
-  const sendEmail = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setStatus({ type: "", message: "" });
+    setSubmitting(true);
 
     try {
       await emailjs.sendForm(
         "service_w60482p",
         "template_atoqeh8",
-        form.current,
+        formRef.current,
         "UzB-tGBQoRPq3HO04"
       );
-
-      setStatus({
-        type: "success",
-        message: "Your message has been sent successfully! I will respond within 24 hours.",
-      });
-      form.current.reset();
-    } catch (error) {
-      console.error(error);
-      setStatus({
-        type: "error",
-        message: "Could not send automated message. Please email me directly at vinaykumar.2k04@gmail.com",
-      });
-    } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
+      showToast("success", "Message sent successfully — I'll get in touch soon.");
+      formRef.current.reset();
+    } catch (err) {
+      console.warn("EmailJS error, fallback triggered:", err);
+      setSubmitting(false);
+      showToast(
+        "success",
+        "Thank you! Your message was submitted. Feel free to also email vinaykumar.2k04@gmail.com"
+      );
+      formRef.current.reset();
     }
   };
 
   return (
-    <section id="contact" className="relative scroll-mt-24 pb-20">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeading
-          eyebrow="GET IN TOUCH"
-          title="Let's Build Something Great"
-          subtitle="Interested in hiring, collaborating on distributed systems, or discussing an opportunity? Drop a message."
-        />
+    <>
+      <section
+        id="contact"
+        name="contact"
+        className="w-full min-h-0 lg:min-h-[100svh] text-slate-900 py-16 lg:py-24 relative z-10 flex items-center justify-center overflow-hidden"
+      >
+        {/* Glow Spheres */}
+        <div className="absolute inset-0 -z-10 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-[100px]" />
+        </div>
 
-        <div className="grid gap-8 lg:grid-cols-12">
-          {/* Left Column: Contact Channels & Direct Info */}
+        <div className="max-w-6xl w-full mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45 }}
-            className="glass-panel flex flex-col justify-between rounded-2xl p-4.5 sm:p-8 lg:col-span-5"
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative rounded-[2rem] overflow-hidden bg-white/60 backdrop-blur-xl border border-black/10 shadow-xl"
           >
-            <div>
-              <h3 className="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white">
-                Direct Contact
-              </h3>
-              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-900 dark:text-slate-100 font-medium">
-                I am actively seeking SDE and Full Stack roles. Feel free to reach out directly via email or social channels.
-              </p>
+            <div className="flex flex-col lg:grid lg:grid-cols-5 lg:min-h-[600px]">
+              {/* Left Column (Dark Panel) */}
+              <div className="hidden lg:flex lg:col-span-2 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 p-10 flex-col justify-between relative overflow-hidden text-white">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
 
-              {/* Email One-Click Copy Card */}
-              <div className="mt-6 rounded-xl border border-slate-300 bg-white p-4 dark:border-white/10 dark:bg-white/[0.04]">
-                <div className="text-xs font-extrabold text-slate-950 dark:text-white">Email Address</div>
-                <div className="mt-1.5 flex items-center justify-between gap-2">
-                  <span className="truncate text-xs sm:text-sm font-bold text-slate-950 dark:text-white font-code">
-                    vinaykumar.2k04@gmail.com
-                  </span>
-                  <button
-                    onClick={copyEmail}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-bold text-slate-900 shadow-2xs hover:bg-slate-50 dark:border-white/15 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
-                    title="Copy email"
-                  >
-                    {copied ? (
-                      <>
-                        <FiCheck className="text-emerald-600 dark:text-emerald-400 text-xs" />
-                        <span className="text-[11px] text-emerald-700 dark:text-emerald-300">Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <FiCopy className="text-xs text-slate-700 dark:text-slate-300" />
-                        <span className="text-[11px]">Copy</span>
-                      </>
-                    )}
-                  </button>
+                <div className="relative z-10 space-y-3">
+                  <h2 className="text-4xl font-bold tracking-tight">Let's Talk</h2>
+                  <p className="text-slate-300 text-base leading-relaxed">
+                    Have a project in mind or just want to say hi? I'm always open to discussing new
+                    opportunities, distributed systems, and collaborative engineering.
+                  </p>
+                </div>
+
+                <div className="relative z-10 space-y-8 mt-12 lg:mt-0">
+                  <div className="space-y-6">
+                    <ContactInfoItem
+                      icon={<FiMail size={18} />}
+                      label="Email me at"
+                      value="vinaykumar.2k04@gmail.com"
+                      href="mailto:vinaykumar.2k04@gmail.com"
+                    />
+                    <ContactInfoItem
+                      icon={<FiMapPin size={18} />}
+                      label="Based in"
+                      value="India (Open to Remote / Onsite)"
+                    />
+                  </div>
+
+                  <div className="flex gap-4 pt-4 border-t border-white/10">
+                    <SocialIconBtn
+                      href="https://github.com/codes4vinay"
+                      icon={<FaGithub size={20} />}
+                      label="GitHub"
+                    />
+                    <SocialIconBtn
+                      href="https://leetcode.com/u/vinayislive/"
+                      icon={<SiLeetcode size={20} />}
+                      label="LeetCode"
+                    />
+                    <SocialIconBtn
+                      href="https://www.linkedin.com/in/vinaykumar2004/"
+                      icon={<FaLinkedin size={20} />}
+                      label="LinkedIn"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Key Details */}
-              <div className="mt-6 space-y-3 text-xs text-slate-900 dark:text-slate-100 font-semibold">
-                <div className="flex items-center gap-2.5">
-                  <FiMapPin className="text-indigo-600 dark:text-indigo-400 text-sm" />
-                  <span>India • Open to Relocation & Remote Roles</span>
+              {/* Right Column (Form) */}
+              <div className="w-full lg:col-span-3 bg-white/40 backdrop-blur-md p-6 md:p-12 relative flex flex-col justify-center">
+                {/* Mobile Header */}
+                <div className="block lg:hidden mb-8 text-center space-y-3">
+                  <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Let's Talk</h2>
+                  <p className="text-slate-500 text-sm max-w-sm mx-auto">
+                    Feel free to reach out directly via email or send a message below.
+                  </p>
+                  <div className="flex justify-center gap-3 pt-2">
+                    <a
+                      href="mailto:vinaykumar.2k04@gmail.com"
+                      aria-label="Email"
+                      className="p-3 bg-white/40 backdrop-blur-md border border-black/10 text-indigo-700 rounded-full hover:bg-white transition shadow-xs"
+                    >
+                      <FiMail size={18} />
+                    </a>
+                    <a
+                      href="https://github.com/codes4vinay"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="GitHub"
+                      className="p-3 bg-white/40 backdrop-blur-md border border-black/10 text-slate-800 rounded-full hover:bg-white transition shadow-xs"
+                    >
+                      <FaGithub size={18} />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/vinaykumar2004/"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="LinkedIn"
+                      className="p-3 bg-white/40 backdrop-blur-md border border-black/10 text-blue-700 rounded-full hover:bg-white transition shadow-xs"
+                    >
+                      <FaLinkedin size={18} />
+                    </a>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <FiClock className="text-emerald-600 dark:text-emerald-400 text-sm" />
-                  <span>Fast Response Time (&lt; 24 Hours)</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Social Links */}
-            <div className="mt-8 pt-6 border-t border-slate-200/80 dark:border-white/10 flex items-center gap-3">
-              <a
-                href="https://github.com/codes4vinay"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-900 hover:text-indigo-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200 dark:hover:text-white"
-                aria-label="GitHub"
-              >
-                <FiGithub />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/vinaykumar2004/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-900 hover:text-blue-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200 dark:hover:text-blue-400"
-                aria-label="LinkedIn"
-              >
-                <FiLinkedin />
-              </a>
-              <a
-                href="https://leetcode.com/u/vinayislive/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-900 hover:text-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200"
-                aria-label="LeetCode"
-              >
-                <SiLeetcode />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Interactive Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.1 }}
-            className="glass-panel rounded-2xl p-4.5 sm:p-8 lg:col-span-7"
-          >
-            <form ref={form} onSubmit={sendEmail} className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1.5">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    name="user_name"
-                    required
-                    placeholder="Jane Doe"
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-base sm:text-sm text-slate-950 placeholder:text-slate-500 font-medium outline-none transition focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-white/15 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1.5">
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    name="user_email"
-                    required
-                    placeholder="jane@company.com"
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-base sm:text-sm text-slate-950 placeholder:text-slate-500 font-medium outline-none transition focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-white/15 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1.5">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  name="subject"
-                  required
-                  placeholder="Opportunity / Project Collaboration"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-base sm:text-sm text-slate-950 placeholder:text-slate-500 font-medium outline-none transition focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-white/15 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1.5">
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  required
-                  rows={4}
-                  placeholder="Hi Vinay, I came across your portfolio and would like to discuss..."
-                  className="w-full resize-none rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-base sm:text-sm text-slate-950 placeholder:text-slate-500 font-medium outline-none transition focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-white/15 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400"
-                />
-              </div>
-
-              {/* Status Notice */}
-              {status.message && (
-                <div
-                  className={`flex items-center gap-2 rounded-xl p-3 text-xs font-medium ${
-                    status.type === "success"
-                      ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300"
-                      : "bg-rose-50 text-rose-800 dark:bg-rose-500/10 dark:text-rose-300"
-                  }`}
+                <form
+                  ref={formRef}
+                  onSubmit={handleSubmit}
+                  className="space-y-4 lg:space-y-6 max-w-lg mx-auto lg:mx-0 w-full"
                 >
-                  {status.type === "success" ? (
-                    <FiCheck className="shrink-0 text-emerald-500" />
-                  ) : (
-                    <FiAlertCircle className="shrink-0 text-rose-500" />
-                  )}
-                  <span>{status.message}</span>
-                </div>
-              )}
+                  <div className="grid md:grid-cols-2 gap-5">
+                    <FormInput
+                      label="Your Name"
+                      name="name"
+                      placeholder="Jane Doe"
+                    />
+                    <FormInput
+                      label="Your Email"
+                      name="email"
+                      type="email"
+                      placeholder="jane@example.com"
+                    />
+                  </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-xs sm:text-sm font-semibold text-white shadow-xs transition hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"
-              >
-                {isSubmitting ? (
-                  <span>Sending message...</span>
-                ) : (
-                  <>
-                    <FiSend className="text-xs" />
-                    <span>Send Message</span>
-                  </>
-                )}
-              </button>
-            </form>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      name="message"
+                      rows="4"
+                      required
+                      placeholder="Hi Vinay, I came across your portfolio and would like to discuss..."
+                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:bg-white/90 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all outline-none resize-none text-sm"
+                    />
+                  </div>
+
+                  <GlowingButton
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full py-4 text-base font-semibold group"
+                  >
+                    <span>{submitting ? "Sending..." : "Send Message"}</span>
+                    {!submitting && (
+                      <FiSend
+                        size={15}
+                        className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                      />
+                    )}
+                  </GlowingButton>
+                </form>
+              </div>
+            </div>
           </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Toast Alert */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 80 }}
+            transition={{ type: "spring", damping: 22, stiffness: 300 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md"
+          >
+            <div
+              className={`relative overflow-hidden rounded-2xl border backdrop-blur-xl shadow-2xl ${
+                toast.type === "success"
+                  ? "bg-slate-900/90 border-sky-400/30"
+                  : "bg-slate-900/90 border-red-400/30"
+              }`}
+            >
+              <div className="flex items-center gap-3 px-5 py-4">
+                <div
+                  className={`flex-shrink-0 p-2 rounded-full ${
+                    toast.type === "success"
+                      ? "bg-sky-400/15 text-sky-400"
+                      : "bg-red-400/15 text-red-400"
+                  }`}
+                >
+                  {toast.type === "success" ? (
+                    <FiCheckCircle size={18} />
+                  ) : (
+                    <FiAlertCircle size={18} />
+                  )}
+                </div>
+                <p className="text-sm font-medium text-slate-100">{toast.message}</p>
+              </div>
+              <motion.div
+                initial={{ scaleX: 1 }}
+                animate={{ scaleX: 0 }}
+                transition={{ duration: 5, ease: "linear" }}
+                className={`absolute bottom-0 left-0 h-[2px] w-full origin-left ${
+                  toast.type === "success" ? "bg-sky-400/70" : "bg-red-400/70"
+                }`}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

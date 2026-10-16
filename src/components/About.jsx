@@ -1,142 +1,182 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
+import { FiArrowUpRight, FiArrowDown } from "react-icons/fi";
 import { ABOUT_TEXT } from "../constants";
-import SectionHeading from "./SectionHeading";
-import {
-  FiServer,
-  FiCpu,
-  FiCloud,
-  FiCheckCircle,
-  FiShield,
-  FiDatabase,
-  FiChevronDown,
-} from "react-icons/fi";
+
+const PHILOSOPHIES = [
+  {
+    number: "01",
+    title: "Make complexity feel quiet.",
+    description:
+      "The best interface is the one that lets the work speak. I care about clear flows, fast feedback, and details that reward a second look.",
+  },
+  {
+    number: "02",
+    title: "Stay close to the metal.",
+    description:
+      "I like understanding what happens underneath the UI — from data models and APIs to deployment, observability, and the last mile of performance.",
+  },
+  {
+    number: "03",
+    title: "Ship, then sharpen.",
+    description:
+      "Working software is the baseline. Once it's live, I iterate on edge cases, accessibility, and micro-interactions.",
+  },
+];
 
 const About = () => {
-  const [expanded, setExpanded] = useState(false);
-  const pillars = [
-    {
-      icon: <FiServer className="text-indigo-500 text-xl" />,
-      title: "Backend & Systems Architecture",
-      desc: "Architecting high-throughput REST APIs, implementing raw HTTP stream handling without heavy frameworks, and optimizing query indexing across MongoDB and SQL.",
-      tags: ["Node.js", "Express", "MongoDB", "FastAPI", "Redis"],
-    },
-    {
-      icon: <FiCpu className="text-emerald-500 text-xl" />,
-      title: "GenAI & Semantic Retrieval",
-      desc: "Engineering production-ready RAG pipelines with vector databases (Pinecone, FAISS), implementing semantic search, chunking strategies, and LLM orchestration.",
-      tags: ["RAG", "Pinecone", "LangChain", "FAISS", "Gemini API"],
-    },
-    {
-      icon: <FiCloud className="text-sky-500 text-xl" />,
-      title: "DevOps & Cloud Deployment",
-      desc: "Containerizing services with Docker, deploying resilient microservices to Azure and AWS, and automating continuous delivery pipelines with GitHub Actions.",
-      tags: ["Docker", "Azure", "AWS", "CI/CD", "Nginx"],
-    },
-  ];
+  const scrollToContact = (e) => {
+    if (e) e.preventDefault();
+    const el = document.getElementById("contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section id="about" className="relative scroll-mt-24 pb-14 sm:pb-20">
-      <SectionHeading
-        eyebrow="ENGINEERING PHILOSOPHY"
-        title="Scalable Architecture & Clean Design"
-        subtitle="Focused on shipping resilient services, thoughtful APIs, and practical AI applications that solve real-world problems."
-      />
+    <section
+      id="about"
+      name="about"
+      className="relative flex min-h-svh w-full items-center overflow-hidden px-6 py-24 text-slate-900 lg:py-32"
+    >
+      {/* Background ambient blurs */}
+      <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-indigo-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-violet-400/10 blur-3xl" />
 
-      <div className="mx-auto grid max-w-5xl gap-4 sm:gap-6 lg:grid-cols-12 lg:items-stretch">
-        {/* Left: Bio Narrative */}
+      <div className="relative z-10 mx-auto w-full max-w-screen-xl">
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
-          className="glass-panel flex flex-col justify-between rounded-2xl p-4.5 sm:p-8 lg:col-span-6"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.55 }}
+          className="mb-16 flex items-end justify-between border-b border-slate-900/15 pb-4"
         >
-          <div>
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-indigo-700 dark:text-indigo-400 font-code">
-              <span className="h-2 w-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-              <span>Bio & Background</span>
-            </div>
-            <h3 className="mt-3 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white">
-              Hi, I'm Vinay Kumar
-            </h3>
-            <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-900 dark:text-slate-100 font-medium">
-              {ABOUT_TEXT}
-            </p>
-            <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-900 dark:text-slate-100 font-medium">
-              I prioritize clean code structure, predictable type contracts with Zod and TypeScript, and measurable outcomes — whether that means cutting slow MongoDB queries at Sahii or achieving a 99 Lighthouse performance score at Phi Launcher.
-            </p>
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-xs font-semibold tracking-[0.3em] text-indigo-600">
+              01 / 04
+            </span>
+            <span className="h-px w-10 bg-indigo-500" />
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              About
+            </span>
           </div>
-
-          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 grid grid-cols-2 gap-4 text-xs">
-            <div>
-              <span className="font-extrabold text-slate-950 dark:text-white block text-[13px]">Location</span>
-              <span className="text-slate-800 dark:text-slate-200 font-semibold mt-0.5 block">India (Open to Remote / Onsite)</span>
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-950 dark:text-white block text-[13px]">Education</span>
-              <span className="text-slate-800 dark:text-slate-200 font-semibold mt-0.5 block">Indian Institute of Information Technology, Una</span>
-            </div>
-          </div>
+          <span className="hidden font-mono text-xs text-slate-400 sm:block">
+            VINAY KUMAR — 2026
+          </span>
         </motion.div>
 
-        {/* Right: 3 Architectural Pillars */}
-        <div className="grid gap-4 lg:col-span-6">
-          {pillars.map((pillar, idx) => {
-            const isHiddenOnMobile = !expanded && idx > 0;
-            return (
-              <motion.div
-                key={pillar.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: idx * 0.08 }}
-                className={`glass-panel interactive-card rounded-2xl p-4 sm:p-5 ${
-                  isHiddenOnMobile ? "hidden sm:block" : "block"
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/[0.04]">
-                    {pillar.icon}
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-slate-950 dark:text-white">
-                      {pillar.title}
-                    </h4>
-                    <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 font-medium">
-                      {pillar.desc}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {pillar.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-md border border-slate-300 bg-slate-100 px-2 py-0.5 text-[11px] font-bold font-code text-slate-900 dark:border-white/15 dark:bg-white/10 dark:text-slate-200"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Main Grid */}
+        <div className="grid gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-24">
+          {/* Left Column: Heading & Narrative */}
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
+          >
+            <p className="mb-7 font-mono text-xs font-semibold uppercase tracking-[0.25em] text-indigo-600">
+              A developer in progress
+            </p>
 
-          {/* Mobile Progressive Disclosure Toggle */}
-          <div className="sm:hidden mt-2 text-center">
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-xs font-bold text-slate-900 shadow-2xs transition hover:bg-slate-100 dark:border-white/15 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-            >
-              <span>{expanded ? "Show Less" : "More About Me"}</span>
-              <FiChevronDown
-                className={`text-sm text-indigo-600 dark:text-indigo-400 transition-transform duration-300 ${
-                  expanded ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-          </div>
+            <h2 className="max-w-3xl text-[clamp(3.4rem,8vw,7.8rem)] font-semibold leading-[0.88] tracking-[-0.075em] text-slate-900">
+              I build things
+              <span className="block text-indigo-600">that hold up.</span>
+            </h2>
+
+            <div className="mt-12 flex max-w-xl gap-5 border-l-2 border-indigo-500 pl-5 sm:pl-7">
+              <p className="text-lg leading-relaxed text-slate-600 sm:text-xl">
+                {ABOUT_TEXT}
+              </p>
+            </div>
+
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 pl-5 sm:pl-7">
+              I prioritize clean code structure, predictable type contracts, and measurable outcomes
+              — whether that means reducing MongoDB query latencies at Sahii or achieving a 99
+              Lighthouse performance score at Phi Launcher.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 pl-5 sm:pl-7">
+              <button
+                onClick={scrollToContact}
+                className="group inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900 cursor-pointer"
+              >
+                <span>Start a conversation</span>
+                <FiArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 text-indigo-600" />
+              </button>
+            </div>
+
+            <div className="mt-16 hidden items-center gap-4 text-slate-400 lg:flex pl-5 sm:pl-7">
+              <FiArrowDown className="h-5 w-5 animate-bounce text-indigo-600" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em]">
+                Keep scrolling
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Right Column: How I Work Philosophies */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="self-end"
+          >
+            <div className="mb-6 flex items-center justify-between border-b border-slate-900/15 pb-3">
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-slate-400">
+                How I work
+              </span>
+            </div>
+
+            <div>
+              {PHILOSOPHIES.map((item, idx) => (
+                <motion.article
+                  key={item.number}
+                  initial={{ opacity: 0, x: 18 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: 0.18 + idx * 0.1 }}
+                  className="group grid grid-cols-[2.5rem_1fr] gap-4 border-b border-slate-900/15 py-7 first:pt-2"
+                >
+                  <span className="pt-1 font-mono text-xs text-indigo-500 font-semibold">
+                    {item.number}
+                  </span>
+                  <div>
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-900 transition-colors group-hover:text-indigo-600 sm:text-2xl">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500 sm:text-base">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </motion.div>
         </div>
+
+        {/* Bottom Status Bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="mt-20 flex flex-col gap-5 border-t border-slate-900/15 pt-5 text-xs sm:flex-row sm:items-center sm:justify-between"
+        >
+          <span className="font-mono uppercase tracking-[0.25em] text-slate-400">
+            Currently exploring
+          </span>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 font-medium text-slate-600">
+            <span>distributed systems</span>
+            <span className="text-indigo-500">✦</span>
+            <span>generative AI</span>
+            <span className="text-indigo-500">✦</span>
+            <span>RAG pipelines</span>
+            <span className="text-indigo-500">✦</span>
+            <span>cloud native architecture</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
